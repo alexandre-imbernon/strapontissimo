@@ -96,29 +96,27 @@ try {
 </head>
 <body>
     <header>
-        <!-- Votre en-tête -->
-        <h1>Ma Boutique en Ligne</h1>
+        <h1>Strapontissimo</h1>
     </header>
 
     <section>
-        <h1>Liste des Produits</h1>
+        <h1>Nos Strapontins</h1>
         <div class="product-container">
             <?php foreach ($products as $product): ?>
                 <div class="product">
                     <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
                     <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
                     <p>Prix: <?php echo number_format($product['price'], 2); ?> EUR</p>
-                    <p>Stock: <?php echo $product['stock']; ?></p>
                     <p>Infos: <?php echo htmlspecialchars($product['infoproduct']); ?></p>
                     <br>
+                    <p>Stock: <?php echo $product['stock']; ?></p>
                     <p>Date d'ajout: <?php echo $product['date']; ?></p>
                 </div>
             <?php endforeach; ?>
         </div>
     </section>
-
     <footer>
-        <p>&copy; 2024 Ma Boutique en Ligne</p>
+        <p>© 2024 Strapontissimo - Le confort instantané</p>
     </footer>
 </body>
 </html>
