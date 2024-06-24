@@ -1,0 +1,96 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(239, 219, 181);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-bottom: 50px; /* Assurez-vous que le contenu ne soit pas masqué par le footer */
+}
+
+header {
+    background-color: #c9c1bb;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.navbar-nav {
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.nav-item {
+    display: inline-block; /* Pour les écrans plus larges */
+}
+
+.nav-link {
+    color: #fff;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background-color: #b4a1a1;
+}
+
+.navbar-brand {
+    color: #fff;
+    padding: 14px 20px;
+}
+
+footer {
+    background-color: #d1c7be;
+    color: #000000;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.btn {
+    background-color: #cab194;
+}
+
+.card-title {
+    border-radius: 10px;
+}
+
+.container {
+    padding-top: 10px;
+    flex-grow: 1;
+}
+
+.card {
+    margin: 20px;
+    text-align: center;
+}
+
+.section-title {
+    margin-left: 15px;
+}
+
+
+.container {
+    padding-top: 10px;
+    flex-grow: 1;
+    margin-bottom: 50px; /* Espace entre les cartes et le footer */
+}
+
+.card img {
+    width: 100%;
+    height: 200px; /* Hauteur fixe pour les images */
+     /* Ajuster l'image pour couvrir la zone sans déformation */
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.stretched-link {
+    margin-top: auto; /* Placer le lien en bas de la carte */
+}
+
