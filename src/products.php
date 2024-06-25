@@ -35,16 +35,24 @@ try {
             padding: 0;
         }
 
-        header, footer {
-            background-color: #222;
+        header{
+            background-color: white;
             color: white;
             text-align: center;
-            padding: 1rem 0;
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        header img {
+            max-height: 100px; /* Ajustez cette valeur selon vos besoins */
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         h1 {
-            text-align: center;
-            color: #444;
+            margin: 0;
         }
 
         .product-container {
@@ -91,6 +99,7 @@ try {
 
         footer {
             margin-top: 20px;
+
         }
 
         .product a {
@@ -125,11 +134,12 @@ try {
 </head>
 <body>
     <header>
-        <h1>Strapontissimo</h1>
+        <img src="assets/images/logo.png" alt="Logo"> <!-- Ajoutez le chemin correct vers votre image ici -->
     </header>
 
     <section>
-        <h1>Nos Strapontins</h1>
+        <br>
+        <h1> \ Nos Strapontins</h1>
         <div class="product-container">
             <?php foreach ($products as $product): ?>
                 <div class="product" data-href="details.php?id_product=<?php echo $product['id_product']; ?>">

@@ -51,11 +51,12 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
             padding: 0;
         }
 
-        header, footer {
-            background-color: #222;
+        header{
+            background-color: white;
             color: white;
             text-align: center;
-            padding: 1rem 0;
+            padding: 0rem 0;
+            position: relative;
         }
 
         .product-details {
@@ -110,8 +111,8 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
     </style>
 </head>
 <body>
-    <header>
-        <h1>Strapontissimo</h1>
+<header>
+        <img src="assets/images/logo.png" alt="Logo"> <!-- Ajoutez le chemin correct vers votre image ici -->
     </header>
 
     <section>
