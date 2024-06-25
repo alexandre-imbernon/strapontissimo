@@ -26,7 +26,6 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Produits</title>
-    <!-- Inclure vos styles CSS ici -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -111,7 +110,8 @@ try {
                     <br>
                     <p>Stock: <?php echo $product['stock']; ?></p>
                     <p>Date d'ajout: <?php echo $product['date']; ?></p>
-                </div>
+                    <a href="details.php?id_product=<?php echo $product['id_product']; ?>">Voir les détails</a> <!-- Lien vers la page details.php -->
+                    </div>
             <?php endforeach; ?>
         </div>
     </section>
