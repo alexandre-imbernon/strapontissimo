@@ -65,6 +65,7 @@ try {
             box-sizing: border-box;
             text-align: center;
             transition: transform 0.2s;
+            cursor: pointer;
         }
 
         .product:hover {
@@ -91,7 +92,36 @@ try {
         footer {
             margin-top: 20px;
         }
+
+        .product a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .product a:hover {
+            text-decoration: none;
+        }
+
+        .product-link {
+            position: relative;
+        }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var products = document.querySelectorAll('.product');
+            products.forEach(function(product) {
+                product.addEventListener('click', function() {
+                    window.location.href = product.dataset.href;
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <header>
@@ -102,16 +132,10 @@ try {
         <h1>Nos Strapontins</h1>
         <div class="product-container">
             <?php foreach ($products as $product): ?>
-                <div class="product">
+                <div class="product" data-href="details.php?id_product=<?php echo $product['id_product']; ?>">
                     <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
                     <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
-                    <p>Prix: <?php echo number_format($product['price'], 2); ?> EUR</p>
-                    <p>Infos: <?php echo htmlspecialchars($product['infoproduct']); ?></p>
-                    <br>
-                    <p>Stock: <?php echo $product['stock']; ?></p>
-                    <p>Date d'ajout: <?php echo $product['date']; ?></p>
-                    <a href="details.php?id_product=<?php echo $product['id_product']; ?>">Voir les détails</a> <!-- Lien vers la page details.php -->
-                    </div>
+                </div>
             <?php endforeach; ?>
         </div>
     </section>

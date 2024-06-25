@@ -116,10 +116,13 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
 
     <section>
         <div class="product-details">
-            <h1><?php echo htmlspecialchars($product['nom']); ?></h1>
-            <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
-            <p>Prix: <?php echo number_format($product['price'], 2); ?> EUR</p>
-            <p>Description: <?php echo htmlspecialchars($product['infoproduct']); ?></p>
+        <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
+                    <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
+                    <p>Prix: <?php echo number_format($product['price'], 2); ?> EUR</p>
+                    <p>Infos: <?php echo htmlspecialchars($product['infoproduct']); ?></p>
+                    <br>
+                    <p>Stock: <?php echo $product['stock']; ?></p>
+                    <p>Date d'ajout: <?php echo $product['date']; ?></p>
             <form action="panier.php" method="post">
                 <input type="hidden" name="product_id" value="<?php echo $product['id_product']; ?>">
                 <button type="submit">Ajouter au panier</button>
