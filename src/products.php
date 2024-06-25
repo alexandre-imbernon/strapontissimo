@@ -133,8 +133,8 @@ try {
         <div class="product-container">
             <?php foreach ($products as $product): ?>
                 <div class="product" data-href="details.php?id_product=<?php echo $product['id_product']; ?>">
-                    <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
                     <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
+                    <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
                 </div>
             <?php endforeach; ?>
         </div>
