@@ -124,10 +124,14 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
                     <br>
                     <p>En stock: <?php echo $product['stock']; ?></p>
                     <p>Référencé le: <?php echo $product['date']; ?></p>
-            <form action="panier.php" method="post">
-                <input type="hidden" name="product_id" value="<?php echo $product['id_product']; ?>">
-                <button type="submit">Ajouter au panier</button>
-            </form>
+        <form action="panier.php" method="post">
+    <input type="hidden" name="product_id" value="<?php echo $product['id_product']; ?>">
+    <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product['nom']); ?>">
+    <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($product['image']); ?>">
+    <input type="hidden" name="product_price" value="<?php echo number_format($product['price'], 2); ?>">
+    <button type="submit">Ajouter au panier</button>
+</form>
+
         </div>
     </section>
     <footer>

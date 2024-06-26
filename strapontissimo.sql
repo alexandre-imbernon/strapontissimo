@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `commande` (
   `date_commande` date DEFAULT NULL,
   `statut` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `id_product` int DEFAULT NULL,
-  `qté` int DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
   PRIMARY KEY (`id_commande`),
   UNIQUE KEY `id_commande` (`id_commande`,`id_product`),
   KEY `id_user` (`id_user`),
