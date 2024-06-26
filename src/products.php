@@ -1,6 +1,6 @@
 <?php
 // Inclure la classe DataBase.php
-require_once 'database.php';
+require_once 'config/database.php';
 
 // Créer une instance de la classe DataBase
 $db = new DataBase();
@@ -11,7 +11,7 @@ try {
     $conn = $db->getConnection();
 
     // Exemple de requête SQL pour récupérer les produits
-    $sql = "SELECT * FROM products";
+    $sql = "SELECT * FROM products ORDER BY date DESC";
     $stmt = $conn->query($sql);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC); // Récupérer tous les produits sous forme de tableau associatif
 } catch (PDOException $e) {
@@ -35,7 +35,7 @@ try {
             padding: 0;
         }
 
-        header{
+        header {
             background-color: white;
             color: white;
             text-align: center;
@@ -44,7 +44,7 @@ try {
         }
 
         header img {
-            max-height: 100px; /* Ajustez cette valeur selon vos besoins */
+            max-height: 100px;
             position: absolute;
             left: 20px;
             top: 50%;
@@ -69,7 +69,7 @@ try {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             margin: 15px;
             padding: 20px;
-            flex-basis: calc(25% - 30px); /* 4 produits par ligne avec marge de 15px */
+            flex-basis: calc(25% - 30px);
             box-sizing: border-box;
             text-align: center;
             transition: transform 0.2s;
@@ -99,7 +99,6 @@ try {
 
         footer {
             margin-top: 20px;
-
         }
 
         .product a {
@@ -134,7 +133,7 @@ try {
 </head>
 <body>
     <header>
-        <img src="assets/images/logo.png" alt="Logo"> <!-- Ajoutez le chemin correct vers votre image ici -->
+        <img src="assets/images/logo.png" alt="Logo">
     </header>
 
     <section>
