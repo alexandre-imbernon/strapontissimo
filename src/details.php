@@ -111,29 +111,29 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
     </style>
 </head>
 <body>
-<header>
+    <header>
         <img src="assets/images/logo.png" alt="Logo"> <!-- Ajoutez le chemin correct vers votre image ici -->
     </header>
 
     <section>
         <div class="product-details">
-        <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
-                    <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
-                    <p><?php echo number_format($product['price'], 2); ?> EUR</p>
-                    <p><?php echo htmlspecialchars($product['infoproduct']); ?></p>
-                    <br>
-                    <p>En stock: <?php echo $product['stock']; ?></p>
-                    <p>Référencé le: <?php echo $product['date']; ?></p>
-        <form action="panier.php" method="post">
-    <input type="hidden" name="product_id" value="<?php echo $product['id_product']; ?>">
-    <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product['nom']); ?>">
-    <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($product['image']); ?>">
-    <input type="hidden" name="product_price" value="<?php echo number_format($product['price'], 2); ?>">
-    <button type="submit">Ajouter au panier</button>
-</form>
-
+            <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
+            <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
+            <p><?php echo number_format($product['price'], 2, ',', '.') . ' EUR'; ?></p>
+            <p><?php echo htmlspecialchars($product['infoproduct']); ?></p>
+            <br>
+            <p>En stock: <?php echo $product['stock']; ?></p>
+            <p>Référencé le: <?php echo $product['date']; ?></p>
+            <form action="panier.php" method="post">
+                <input type="hidden" name="product_id" value="<?php echo $product['id_product']; ?>">
+                <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product['nom']); ?>">
+                <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($product['image']); ?>">
+                <input type="hidden" name="product_price" value="<?php echo number_format($product['price'], 2, '.', ''); ?>">
+                <button type="submit">Ajouter au panier</button>
+            </form>
         </div>
     </section>
+
     <footer>
         <p>© 2024 Strapontissimo - Le confort instantané</p>
     </footer>

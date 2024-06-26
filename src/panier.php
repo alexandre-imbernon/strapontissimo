@@ -31,8 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['remove_product_id'])) 
     // Réindexer le tableau après la suppression
     $_SESSION['panier'] = array_values($_SESSION['panier']);
 }
-
-// Afficher les produits dans le panier
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -108,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['remove_product_id'])) 
 </head>
 <body>
     <header>
-        <img src="assets/images/logo.png" alt="Logo"> <!-- Ajoutez le chemin correct vers votre image ici -->
+        <img src="assets/images/logo.png" alt="Logo"> <!-- Assurez-vous d'ajouter le chemin correct vers votre image ici -->
     </header>
 
     <section class="cart">
@@ -118,21 +116,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['remove_product_id'])) 
         <?php else: ?>
             <?php foreach ($_SESSION['panier'] as $item): ?>
                 <div class="cart-item">
-                    <img src="<?php echo isset($item['image']) ? htmlspecialchars($item['image']) : ''; ?>" alt="<?php echo isset($item['name']) ? htmlspecialchars($item['name']) : ''; ?>">
+                    <img src="<?php echo htmlspecialchars($item['image'] ?? ''); ?>" alt="<?php echo htmlspecialchars($item['name'] ?? ''); ?>">
                     <div class="item-details">
-                        <p><?php echo isset($item['name']) ? htmlspecialchars($item['name']) : ''; ?></p>
-                        <?php
-                        // Vérifier si $item['price'] est une chaîne valide représentant un nombre
-                        if (isset($item['price']) && is_numeric($item['price'])) {
-                            $formatted_price = number_format((float)$item['price'], 2) . ' EUR';
-                            echo '<p>' . $formatted_price . '</p>';
-                        } else {
-                            echo '<p>Prix non disponible</p>'; // Ou toute autre gestion d'erreur appropriée
-                        }
-                        ?>
+                        <p><?php echo htmlspecialchars($item['name'] ?? ''); ?></p>
+                        <?php if (isset($item['price']) && is_numeric($item['price'])): ?>
+                            <p><?php echo number_format((float)$item['price'], 2, ',', '.') . ' EUR'; ?></p>
+                        <?php else: ?>
+                            <p>Prix non disponible</p>
+                        <?php endif; ?>
                     </div>
                     <form method="post">
-                        <input type="hidden" name="remove_product_id" value="<?php echo $item['id']; ?>">
+                        <input type="hidden" name="remove_product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
                         <button type="submit" class="remove-button">Supprimer</button>
                     </form>
                 </div>
