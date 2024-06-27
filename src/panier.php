@@ -1,6 +1,5 @@
 <?php
 session_start();
-var_dump($_SESSION);
 
 // Initialiser le panier s'il n'existe pas déjà dans la session
 if (!isset($_SESSION['panier'])) {
@@ -121,6 +120,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
             cursor: pointer;
         }
 
+        .cart-summary {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .cart-summary p {
+            margin: 5px 0;
+        }
+
+        .cart-actions {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .proceed-to-checkout-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .proceed-to-checkout-button:hover {
+            background-color: #0056b3;
+        }
+
         footer {
             margin-top: 20px;
             text-align: center;
@@ -129,10 +160,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
     </style>
 </head>
 <body>
-    <header>
-        <img src="assets/images/logo.png" alt="Logo"> <!-- Assurez-vous d'ajouter le chemin correct vers votre image ici -->
-    </header>
-    <section class="cart">
+<header>
+    <img src="assets/images/logo.png" alt="Logo"> <!-- Assurez-vous d'ajouter le chemin correct vers votre image ici -->
+</header>
+<section class="cart">
     <h1>Votre Panier</h1>
     <?php if (empty($_SESSION['panier'])): ?>
         <p>Votre panier est vide.</p>
@@ -148,10 +179,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
                         <p>Prix non disponible</p>
                     <?php endif; ?>
                     <?php
-                        // Afficher la quantité avec "x1", "x2", etc.
-                        $quantityDisplay = ($item['quantity'] > 1) ? 'x' . $item['quantity'] : 'x1';
-                        ?>
-                        <p>Quantité : <?php echo htmlspecialchars($quantityDisplay); ?></p>
+                    // Afficher la quantité avec "x1", "x2", etc.
+                    $quantityDisplay = ($item['quantity'] > 1) ? 'x' . $item['quantity'] : 'x1';
+                    ?>
+                    <p>Quantité : <?php echo htmlspecialchars($quantityDisplay); ?></p>
                 </div>
                 <form method="post">
                     <input type="hidden" name="remove_product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
@@ -162,8 +193,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
     <?php endif; ?>
 </section>
 
-    <footer>
-        <p>© 2024 Strapontissimo - Le confort instantané</p>
-    </footer>
+<?php
+$totalItems = 0;
+$totalPrice = 0.0;
+
+// Calculer le nombre total d'articles et le total en euros
+foreach ($_SESSION['panier'] as $item) {
+    $totalItems += $item['quantity'];
+    $totalPrice += $item['price'] * $item['quantity'];
+}
+?>
+
+<?php if (!empty($_SESSION['panier'])): ?>
+    <div class="cart-summary">
+        <p>Total des articles : <?php echo $totalItems; ?></p>
+        <p>Total en euros : <?php echo number_format($totalPrice, 2, ',', '.') . ' EUR'; ?></p>
+    </div>
+
+    <div class="cart-actions">
+        <button class="proceed-to-checkout-button">Procéder au paiement</button>
+    </div>
+<?php endif; ?>
+
+
+<footer>
+    <p>© 2024 Strapontissimo - Le confort instantané</p>
+</footer>
 </body>
 </html>
