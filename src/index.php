@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'config/database.php';
 
 $db = new DataBase();
@@ -55,6 +56,11 @@ try {
             margin: 0;
         }
 
+        .welcome-message {
+            text-align: center;
+            margin: 20px 0;
+        }
+
         .product-container {
             display: flex;
             flex-wrap: wrap;
@@ -92,11 +98,6 @@ try {
             margin-bottom: 10px;
         }
 
-        .product p {
-            font-size: 1em;
-            margin: 5px 0;
-        }
-
         footer {
             margin-top: 20px;
         }
@@ -126,6 +127,12 @@ try {
         <img src="assets/images/logo.png" alt="Logo">
         <h1>Bienvenue à Strapontissimo</h1>
     </header>
+
+    <?php if (isset($_SESSION['user_first_name'])): ?>
+        <div class="welcome-message">
+            <h2>Bienvenue, <?php echo htmlspecialchars($_SESSION['user_first_name']); ?>!</h2>
+        </div>
+    <?php endif; ?>
 
     <section class="featured-products">
         <h2>Produits Phares</h2>
