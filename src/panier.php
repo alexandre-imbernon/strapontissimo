@@ -1,113 +1,61 @@
 <?php
 session_start();
+var_dump($_SESSION);
 
-// Connexion à la base de données
-$conn = new mysqli('localhost', 'root', '', 'strapontissimo');
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fonction pour ajouter un produit au panier
-function addToCart($userId, $productId, $quantity) {
-    global $conn;
-
-    // Vérifier si l'utilisateur existe dans la table users
-    $sqlUserCheck = "SELECT * FROM users WHERE id_user = ?";
-    $stmtUserCheck = $conn->prepare($sqlUserCheck);
-    $stmtUserCheck->bind_param('i', $userId);
-    $stmtUserCheck->execute();
-    $resultUserCheck = $stmtUserCheck->get_result();
-
-    if ($resultUserCheck->num_rows == 0) {
-        die("User ID does not exist in the users table.");
-    }
-
-    // Vérifier si le produit est déjà dans le panier
-    $sqlCheck = "SELECT * FROM panier WHERE id_user = ? AND id_product = ?";
-    $stmtCheck = $conn->prepare($sqlCheck);
-    $stmtCheck->bind_param('ii', $userId, $productId);
-    $stmtCheck->execute();
-    $resultCheck = $stmtCheck->get_result();
-
-    if ($resultCheck->num_rows > 0) {
-        // Le produit est déjà dans le panier, incrémenter la quantité
-        $row = $resultCheck->fetch_assoc();
-        $newQuantity = $row['quantity'] + $quantity;
-
-        $sqlUpdate = "UPDATE panier SET quantity = ? WHERE id_user = ? AND id_product = ?";
-        $stmtUpdate = $conn->prepare($sqlUpdate);
-        $stmtUpdate->bind_param('iii', $newQuantity, $userId, $productId);
-        $stmtUpdate->execute();
-    } else {
-        // Le produit n'est pas dans le panier, insérer une nouvelle entrée
-        $sqlInsert = "INSERT INTO panier (id_user, id_product, quantity) VALUES (?, ?, ?)";
-        $stmtInsert = $conn->prepare($sqlInsert);
-        $stmtInsert->bind_param('iii', $userId, $productId, $quantity);
-        $stmtInsert->execute();
-    }
-}
-
-// Initialiser le panier si ce n'est pas déjà fait
+// Initialiser le panier s'il n'existe pas déjà dans la session
 if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = array();
 }
 
-// Ajouter le produit au panier si les informations sont envoyées
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product_id'])) {
-    $userId = 1; // ID de l'utilisateur (à obtenir dynamiquement, par exemple depuis la session)
-    $product_id = $_POST['product_id'];
-    $product_name = $_POST['product_name'];
-    $product_image = $_POST['product_image'];
-    $product_price = $_POST['product_price'];
-
-    // Vérifier si le produit existe déjà dans le panier de la session
-    $product_found = false;
+// Fonction pour ajouter un produit au panier
+function addToCart($productId, $productName, $productImage, $productPrice, $quantity = 1) {
+    // Vérifier si le produit est déjà dans le panier
     foreach ($_SESSION['panier'] as &$item) {
-        if ($item['id'] == $product_id) {
-            $item['quantity']++;
-            $product_found = true;
-            break;
+        if ($item['id'] == $productId) {
+            // Le produit existe déjà, incrémenter la quantité
+            $item['quantity'] += $quantity;
+            return; // Sortir de la fonction après mise à jour
         }
     }
 
-    // Si le produit n'existe pas, l'ajouter avec une quantité de 1
-    if (!$product_found) {
-        $product = array(
-            'id' => $product_id,
-            'name' => $product_name,
-            'image' => $product_image,
-            'price' => $product_price,
-            'quantity' => 1
-        );
-        $_SESSION['panier'][] = $product;
-    }
-
-    // Ajouter le produit au panier dans la base de données
-    addToCart($userId, $product_id, 1);
+    // Le produit n'est pas encore dans le panier, l'ajouter
+    $product = array(
+        'id' => $productId,
+        'name' => $productName,
+        'image' => $productImage,
+        'price' => $productPrice,
+        'quantity' => $quantity
+    );
+    $_SESSION['panier'][] = $product;
 }
 
-// Supprimer un produit du panier si l'ID est envoyé en POST
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['remove_product_id'])) {
-    $remove_id = $_POST['remove_product_id'];
+// Traitement du formulaire d'ajout au panier
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
+    $productId = $_POST['product_id'];
+    $productName = $_POST['product_name'];
+    $productImage = $_POST['product_image'];
+    $productPrice = $_POST['product_price'];
+
+    addToCart($productId, $productName, $productImage, $productPrice);
+}
+
+// Fonction pour supprimer un produit du panier
+function removeFromCart($productId) {
     foreach ($_SESSION['panier'] as $key => $item) {
-        if ($item['id'] == $remove_id) {
+        if ($item['id'] == $productId) {
             unset($_SESSION['panier'][$key]);
-            break; // Sortir de la boucle dès que l'article est supprimé
+            return; // Sortir de la fonction après suppression
         }
     }
-    // Réindexer le tableau après la suppression
-    $_SESSION['panier'] = array_values($_SESSION['panier']);
-
-    // Supprimer le produit du panier dans la base de données
-    $userId = 1; // ID de l'utilisateur (à obtenir dynamiquement, par exemple depuis la session)
-    $sqlDelete = "DELETE FROM panier WHERE id_user = ? AND id_product = ?";
-    $stmtDelete = $conn->prepare($sqlDelete);
-    $stmtDelete->bind_param('ii', $userId, $remove_id);
-    $stmtDelete->execute();
 }
 
-$conn->close();
+// Traitement du formulaire de suppression d'un produit
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id'])) {
+    $removeProductId = $_POST['remove_product_id'];
+    removeFromCart($removeProductId);
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
