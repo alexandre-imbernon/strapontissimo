@@ -1,17 +1,15 @@
 <?php
-// Inclure la classe DataBase.php
-require_once 'database.php';
+session_start();
+
+require_once 'database.php'; // Inclure la classe de connexion à la base de données
 
 // Vérifier si un ID de produit est passé dans l'URL
 if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
     $productId = intval($_GET['id_product']);
 
-    // Créer une instance de la classe DataBase
-    $db = new DataBase();
-
-    // Utiliser la connexion pour exécuter une requête par exemple
     try {
-        // Obtenez la connexion
+        // Obtenez la connexion à la base de données
+        $db = new DataBase();
         $conn = $db->getConnection();
 
         // Requête SQL pour récupérer les détails du produit
@@ -24,15 +22,15 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
         // Vérifier si le produit existe
         if (!$product) {
             echo "Produit non trouvé";
-            exit;
+            exit();
         }
     } catch (PDOException $e) {
         echo "Erreur de requête : " . $e->getMessage();
-        exit;
+        exit();
     }
 } else {
     echo "ID de produit invalide";
-    exit;
+    exit();
 }
 ?>
 

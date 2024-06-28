@@ -1,58 +1,84 @@
 <?php
 session_start();
 
-// Initialiser le panier s'il n'existe pas déjà dans la session
-if (!isset($_SESSION['panier'])) {
-    $_SESSION['panier'] = array();
+// Configuration de la connexion à la base de données
+$servername = "127.0.0.1";
+$username = "root";
+$password = "";
+$dbname = "strapontissimo";
+
+// Créer une connexion
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Vérifier la connexion
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Fonction pour ajouter un produit au panier
-function addToCart($productId, $productName, $productImage, $productPrice, $quantity = 1) {
-    // Vérifier si le produit est déjà dans le panier
-    foreach ($_SESSION['panier'] as &$item) {
-        if ($item['id'] == $productId) {
-            // Le produit existe déjà, incrémenter la quantité
-            $item['quantity'] += $quantity;
-            return; // Sortir de la fonction après mise à jour
-        }
-    }
+// Initialiser le panier s'il n'existe pas déjà dans la session
+if (!isset($_SESSION['id_user'])) {
+    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+    header("Location: login.php");
+    exit();
+}
 
-    // Le produit n'est pas encore dans le panier, l'ajouter
-    $product = array(
-        'id' => $productId,
-        'name' => $productName,
-        'image' => $productImage,
-        'price' => $productPrice,
-        'quantity' => $quantity
-    );
-    $_SESSION['panier'][] = $product;
+$id_user = $_SESSION['id_user'];
+
+// Fonction pour ajouter un produit au panier
+function addToCart($conn, $id_user, $productId, $quantity = 1) {
+    // Vérifier si le produit est déjà dans le panier
+    $sql = "SELECT * FROM panier WHERE id_user = ? AND id_product = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $id_user, $productId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Le produit existe déjà, incrémenter la quantité
+        $sql = "UPDATE panier SET qté = qté + ? WHERE id_user = ? AND id_product = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iii", $quantity, $id_user, $productId);
+        $stmt->execute();
+    } else {
+        // Le produit n'est pas encore dans le panier, l'ajouter
+        $sql = "INSERT INTO panier (id_user, id_product, qté) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iii", $id_user, $productId, $quantity);
+        $stmt->execute();
+    }
 }
 
 // Traitement du formulaire d'ajout au panier
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $productId = $_POST['product_id'];
-    $productName = $_POST['product_name'];
-    $productImage = $_POST['product_image'];
-    $productPrice = $_POST['product_price'];
+    $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
 
-    addToCart($productId, $productName, $productImage, $productPrice);
+    addToCart($conn, $id_user, $productId, $quantity);
 }
 
 // Fonction pour supprimer un produit du panier
-function removeFromCart($productId) {
-    foreach ($_SESSION['panier'] as $key => $item) {
-        if ($item['id'] == $productId) {
-            unset($_SESSION['panier'][$key]);
-            return; // Sortir de la fonction après suppression
-        }
-    }
+function removeFromCart($conn, $id_user, $productId) {
+    $sql = "DELETE FROM panier WHERE id_user = ? AND id_product = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $id_user, $productId);
+    $stmt->execute();
 }
 
 // Traitement du formulaire de suppression d'un produit
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id'])) {
     $removeProductId = $_POST['remove_product_id'];
-    removeFromCart($removeProductId);
+    removeFromCart($conn, $id_user, $removeProductId);
 }
+
+// Récupérer les éléments du panier de la base de données
+$sql = "SELECT p.*, pr.nom, pr.image, pr.price FROM panier p JOIN products pr ON p.id_product = pr.id_product WHERE p.id_user = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id_user);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$panierItems = $result->fetch_all(MYSQLI_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -165,27 +191,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
 </header>
 <section class="cart">
     <h1>Votre Panier</h1>
-    <?php if (empty($_SESSION['panier'])): ?>
+    <?php if (empty($panierItems)): ?>
         <p>Votre panier est vide.</p>
     <?php else: ?>
-        <?php foreach ($_SESSION['panier'] as $item): ?>
+        <?php foreach ($panierItems as $item): ?>
             <div class="cart-item">
-                <img src="<?php echo htmlspecialchars($item['image'] ?? ''); ?>" alt="<?php echo htmlspecialchars($item['name'] ?? ''); ?>">
+                <img src="<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['nom']); ?>">
                 <div class="item-details">
-                    <p><?php echo htmlspecialchars($item['name'] ?? ''); ?></p>
-                    <?php if (isset($item['price']) && is_numeric($item['price'])): ?>
-                        <p><?php echo number_format((float)$item['price'], 2, ',', '.') . ' EUR'; ?></p>
-                    <?php else: ?>
-                        <p>Prix non disponible</p>
-                    <?php endif; ?>
-                    <?php
-                    // Afficher la quantité avec "x1", "x2", etc.
-                    $quantityDisplay = ($item['quantity'] > 1) ? 'x' . $item['quantity'] : 'x1';
-                    ?>
-                    <p>Quantité : <?php echo htmlspecialchars($quantityDisplay); ?></p>
+                    <p><?php echo htmlspecialchars($item['nom']); ?></p>
+                    <p><?php echo number_format((float)$item['price'], 2, ',', '.') . ' EUR'; ?></p>
+                    <p>Quantité : <?php echo htmlspecialchars($item['qté']); ?></p>
                 </div>
                 <form method="post">
-                    <input type="hidden" name="remove_product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
+                    <input type="hidden" name="remove_product_id" value="<?php echo htmlspecialchars($item['id_product']); ?>">
                     <button type="submit" class="remove-button">Supprimer</button>
                 </form>
             </div>
@@ -197,27 +215,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
 $totalItems = 0;
 $totalPrice = 0.0;
 
-// Calculer le nombre total d'articles et le total en euros
-foreach ($_SESSION['panier'] as $item) {
-    $totalItems += $item['quantity'];
-    $totalPrice += $item['price'] * $item['quantity'];
+foreach ($panierItems as $item) {
+    $totalItems += $item['qté'];
+    $totalPrice += $item['price'] * $item['qté'];
 }
 ?>
 
-<?php if (!empty($_SESSION['panier'])): ?>
-    <div class="cart-summary">
-        <p>Total des articles : <?php echo $totalItems; ?></p>
-        <p>Total en euros : <?php echo number_format($totalPrice, 2, ',', '.') . ' EUR'; ?></p>
-    </div>
+<section class="cart-summary">
+    <p>Total des articles : <?php echo $totalItems; ?></p>
+    <p>Total : <?php echo number_format((float)$totalPrice, 2, ',', '.') . ' EUR'; ?></p>
+</section>
 
-    <div class="cart-actions">
-        <button class="proceed-to-checkout-button">Procéder au paiement</button>
-    </div>
-<?php endif; ?>
-
+<section class="cart-actions">
+    <button class="proceed-to-checkout-button">Passer à la caisse</button>
+</section>
 
 <footer>
-    <p>© 2024 Strapontissimo - Le confort instantané</p>
+    &copy; 2024 Strapontissimo. Tous droits réservés.
 </footer>
+
 </body>
 </html>
+
+<?php
+// Fermer la connexion
+$conn->close();
+?>
