@@ -152,7 +152,9 @@ $conn->close();
                 
                 <input type="submit" value="Ajouter">
             </form>
-            
+
+            <div class="divider"></div> <!-- New Divider Bar -->
+
             <?php foreach ($subcategories as $subcategory): ?>
                 <?php if (isset($products_by_subcategory[$subcategory['id_subcategory']])): ?>
                     <h2 style="margin-top: 40px;">Produits pour <?= $subcategory['nom'] ?> (<?= $products_by_subcategory[$subcategory['id_subcategory']][0]['category_name'] ?>)</h2>

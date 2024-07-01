@@ -114,6 +114,12 @@ form input[type="submit"]:hover {
     background-color: #2f2c73;
 }
 
+.divider {
+    height: 2px;
+    background-color: #6C63FF;
+    margin: 20px 0;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
