@@ -30,10 +30,17 @@ body {
 
 .sidebar h3 {
     font-size: 1.2em;
+    margin: 35px;
 }
 
 .sidebar p {
     font-style: italic;
+    margin-top: 50px;
+}
+
+.sidebar h4 {
+    font-size: 1.2em;
+    margin: 30px;
 }
 
 .nav ul {
