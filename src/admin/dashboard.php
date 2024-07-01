@@ -100,7 +100,7 @@ $conn->close();
 <body>
     <div class="container">
         <div class="sidebar">
-            <h2>Bienvenue: <?= $_SESSION['admin_name'] ?></h2>
+            <h2>Bienvenue: <?= $_SESSION['admin_username'] ?></h2>
             <h3>DASHBOARD</h3>
             <p>STRAPONTISSIMO</p>
             <h4>NAVIGATION</h4>
