@@ -164,7 +164,7 @@ $conn->close();
                             <th>Stock</th>
                             <th>Image</th>
                             <th>Date</th>
-                            <th>Actions</th>
+                            <th></th>
                         </tr>
                         <?php foreach ($products_by_subcategory[$subcategory['id_subcategory']] as $product): ?>
                             <tr>
