@@ -1,24 +1,44 @@
 <?php
-// Inclure la classe DataBase.php
 require_once 'database.php';
 
-// Créer une instance de la classe DataBase
-$db = new DataBase();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $db = new DataBase();
+    $searchTerm = isset($_POST['term']) ? $_POST['term'] : '';
+    $category = isset($_POST['category']) ? $_POST['category'] : '';
+    $subCategory = isset($_POST['subCategory']) ? $_POST['subCategory'] : '';
 
-// Utiliser la connexion pour exécuter une requête par exemple
-try {
-    // Obtenez la connexion
-    $conn = $db->getConnection();
+    try {
+        $conn = $db->getConnection();
+        $sql = "SELECT * FROM products WHERE 1";
+        $params = array();
 
-    // Exemple de requête SQL pour récupérer les produits
-    $sql = "SELECT * FROM products";
-    $stmt = $conn->query($sql);
-    $products = $stmt->fetchAll(PDO::FETCH_ASSOC); // Récupérer tous les produits sous forme de tableau associatif
-} catch (PDOException $e) {
-    echo "Erreur de requête : " . $e->getMessage();
-    exit;
+        if (!empty($searchTerm)) {
+            $sql .= " AND nom LIKE :term";
+            $params[':term'] = '%' . $searchTerm . '%';
+        }
+
+        if (!empty($category)) {
+            $sql .= " AND categorie = :category";
+            $params[':category'] = $category;
+        }
+
+        if (!empty($subCategory)) {
+            $sql .= " AND sous_categorie = :subCategory";
+            $params[':subCategory'] = $subCategory;
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($products);
+        exit;
+    } catch (PDOException $e) {
+        echo json_encode(['error' => "Erreur de requête : " . $e->getMessage()]);
+        exit;
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,6 +46,13 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Produits</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,44 +60,30 @@ try {
             color: #333;
             margin: 0;
             padding: 0;
+            font-family: Lora;
         }
-
-        header{
-            background-color: white;
-            color: white;
+        
+        h2 {
+            margin-top: 15px;
+            font-style: italic;
             text-align: center;
-            padding: 4rem 0;
-            position: relative;
+            text-shadow : 3px 3px 4px #d1c7be;
         }
 
-        header img {
-            max-height: 100px; /* Ajustez cette valeur selon vos besoins */
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        h1 {
-            margin: 0;
+        h3 {
+            font-size: 20px;
         }
 
         .product-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
             padding: 20px;
+            margin-bottom: 40px;
         }
 
         .product {
             background-color: white;
-            border: 1px solid #ddd;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin: 15px;
+            margin: 15px 0;
             padding: 20px;
-            flex-basis: calc(25% - 30px); /* 4 produits par ligne avec marge de 15px */
-            box-sizing: border-box;
             text-align: center;
             transition: transform 0.2s;
             cursor: pointer;
@@ -87,70 +100,249 @@ try {
             margin-bottom: 15px;
         }
 
-        .product h3 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
+        .navbar-logo {
+            height: 80px;
+        }
+        
+        .ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1000;
+            background-color: #f8f8f8 !important; 
+            border: 1px solid ;
+            border-radius: 4px;
         }
 
-        .product p {
-            font-size: 1em;
-            margin: 5px 0;
+        .ui-autocomplete .ui-menu-item {
+            padding: 10px;
+            cursor: pointer;
         }
 
+        .ui-autocomplete .ui-menu-item:hover {
+            background-color: white !important;
+            color: white;
+        }
         footer {
-            margin-top: 20px;
-
+            margin-top: 10px;
+            position: relative;
         }
 
-        .product a {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            width: 100%;
-            height: 100%;
+        .product {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product:hover .overlay {
+            opacity: 1;
+        }
+
+        .overlay {
             position: absolute;
             top: 0;
             left: 0;
-        }
-
-        .product a:hover {
-            text-decoration: none;
-        }
-
-        .product-link {
-            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            color: #fff;
+            font-size: 1.5em;
+            text-align: center;
         }
     </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var products = document.querySelectorAll('.product');
-            products.forEach(function(product) {
-                product.addEventListener('click', function() {
-                    window.location.href = product.dataset.href;
+        $(document).on('click', '.product', function() {
+            var url = $(this).data('href');
+            window.location.href = url;
+        });
+
+        $(document).ready(function() {
+            var productContainer = $('#productContainer');
+
+            function displayProducts(products) {
+                productContainer.empty();
+                products.forEach(function(product) {
+                    var productHTML = `
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="product" data-href="details.php?id_product=${product.id_product}">
+                                <img src="${product.image}" alt="${product.nom}">
+                                <h3>${product.nom}</h3>
+                                <div class="overlay">Voir détails</div>
+                            </div>
+                        </div>
+                    `;
+                    productContainer.append(productHTML);
+                });
+            }
+
+            $('#searchInput').autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: 'product.php',
+                        method: 'POST',
+                        data: { term: request.term },
+                        dataType: 'json',
+                        success: function(data) {
+                            response($.map(data, function(item) {
+                                return {
+                                    label: item.nom,
+                                    value: item.nom
+                                };
+                            }));
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erreur lors de la requête AJAX:', status, error);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    $('#searchInput').val(ui.item.value);
+                    $('#searchButton').click();
+                }
+            });
+
+            $('#searchButton').on('click', function() {
+                var searchTerm = $('#searchInput').val();
+                var category = $('#categorySelect').val();
+                var subCategory = $('#subCategorySelect').val();
+                
+                $.ajax({
+                    url: 'product.php',
+                    method: 'POST',
+                    data: { 
+                        term: searchTerm,
+                        category: category,
+                        subCategory: subCategory
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.error) {
+                            console.error(response.error);
+                        } else {
+                            displayProducts(response);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erreur lors de la requête AJAX:', status, error);
+                    }
                 });
             });
         });
     </script>
 </head>
 <body>
-    <header>
-        <img src="assets/images/logo.png" alt="Logo"> <!-- Ajoutez le chemin correct vers votre image ici -->
-    </header>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="assets/images/logoo.png" alt="Logo" class="navbar-logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="adminDropdown">
+                            <a class="dropdown-item" href="login.php">Connexion</a>
+                            <a class="dropdown-item" href="#">Inscription</a>
+                            <a class="dropdown-item" href="#">Administration</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Déconnexion</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-shopping-cart"></i>  
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><strong>Nos produits</strong></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">S'enregistrer</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
 
+<main>
     <section>
-        <br>
-        <h1> \ Nos Strapontins</h1>
-        <div class="product-container">
-            <?php foreach ($products as $product): ?>
-                <div class="product" data-href="details.php?id_product=<?php echo $product['id_product']; ?>">
-                    <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
-                    <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
+        <h2>Tous Nos Strapontins...</h2>
+
+        <!-- Barre de recherche -->
+        <div class="container mb-3">
+            <div class="input-group">
+                <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom de produit">
+                <select id="categorySelect" class="form-control">
+                    <option value="">Toutes les catégories</option>
+                    <option value="interieur">Intérieur</option>
+                    <option value="exterieur">Extérieur</option>
+                </select>
+                <select id="subCategorySelect" class="form-control">
+                    <option value="">Toutes les sous-catégories</option>
+                    <option value="bois">Bois</option>
+                    <option value="plastique">Plastique</option>
+                    <option value="metal">Métal</option>
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="searchButton">Rechercher</button>
                 </div>
-            <?php endforeach; ?>
+            </div>
+        </div>
+
+        <div class="container product-container" id="productContainer">
+            <div class="row">
+                <?php
+                // Initialisation de la connexion
+                $db = new DataBase();
+
+                try {
+                    $conn = $db->getConnection();
+                    $sql = "SELECT * FROM products";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    // Afficher les produits initialement
+                    foreach ($products as $product) {
+                        echo '<div class="col-12 col-sm-6 col-md-4 col-lg-3">';
+                        echo '<div class="product" data-href="details.php?id_product=' . $product['id_product'] . '">';
+                        echo '<img src="' . htmlspecialchars($product['image']) . '" alt="' . htmlspecialchars($product['nom']) . '">';
+                        echo '<h3>' . htmlspecialchars($product['nom']) . '</h3>';
+                        echo '<div class="overlay">Voir détails</div>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                } catch (PDOException $e) {
+                    echo "Erreur de connexion : " . $e->getMessage();
+                }
+                ?>
+            </div>
         </div>
     </section>
-    <footer>
-        <p>© 2024 Strapontissimo - Le confort instantané</p>
-    </footer>
+</main>
+
+<footer>
+    <p>© 2024 Strapontissimo - Le confort instantané</p>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
