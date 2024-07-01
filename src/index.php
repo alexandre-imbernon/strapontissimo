@@ -131,6 +131,7 @@ try {
     <?php if (isset($_SESSION['user_first_name'])): ?>
         <div class="welcome-message">
             <h2>Bienvenue, <?php echo htmlspecialchars($_SESSION['user_first_name']); ?>!</h2>
+            <a href="../src/include/logout.php">Déconnexion</a>
         </div>
     <?php endif; ?>
 
