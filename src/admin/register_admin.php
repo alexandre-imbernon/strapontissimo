@@ -1,5 +1,6 @@
 <?php
-require '../include/config.php'; // Include the configuration file
+require '../config/config.php'; // Include the configuration file
+require '../config/database.php'; // Include the database file
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Fetch and validate form data

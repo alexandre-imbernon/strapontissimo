@@ -83,7 +83,7 @@ body {
     padding: 40px;
     background-color: #252A37;
     box-sizing: border-box;
-    border-left: 2px solid #6C63FF; /* Barre de séparation */
+    border-left: 2px solid #6C63FF; 
     overflow-y: auto;
 }
 
@@ -103,7 +103,7 @@ form input, form select, form textarea {
     margin-bottom: 20px;
     border: none;
     border-radius: 5px;
-    background-color: #1C1E29; /* Changer le fond en #1C1E29 */
+    background-color: #1C1E29;
     color: #FFFFFF;
 }
 
@@ -120,6 +120,12 @@ form input[type="submit"] {
 
 form input[type="submit"]:hover {
     background-color: #2f2c73;
+}
+
+form textarea {
+    resize: vertical;
+    max-height: 150px;
+    min-height: 50px;
 }
 
 .divider {

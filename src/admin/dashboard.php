@@ -1,18 +1,8 @@
 <?php
+require '../config/config.php'; // Mac
+require '../config/database.php'; // Include the database configuration file
 session_start();
 
-$servername = "localhost";
-$username = "root";
-$password = "root";
-$dbname = "strapontissimo";
-
-// Créer une connexion
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Vérifier la connexion
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 // Supprimer un produit
 if (isset($_GET['delete'])) {
@@ -100,7 +90,7 @@ $conn->close();
 <body>
     <div class="container">
         <div class="sidebar">
-            <h2>Bienvenue: <?= $_SESSION['admin_username'] ?></h2>
+        <h2>Bienvenue: <?= isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Invité' ?></h2>
             <h3>DASHBOARD</h3>
             <p>STRAPONTISSIMO</p>
             <h4>NAVIGATION</h4>
@@ -114,7 +104,7 @@ $conn->close();
                     <li><a href="#">Extérieur Bois</a></li>
                     <li><a href="#">Extérieur Plastique</a></li>
                     <li><a href="#">Extérieur Métal</a></li>
-                    <li><a href="#" class="logout">Déconnexion</a></li>
+                    <li><a href="logout.php" class="logout">Déconnexion</a></li>
                 </ul>
             </nav>
         </div>
@@ -153,7 +143,7 @@ $conn->close();
                 <input type="submit" value="Ajouter">
             </form>
 
-            <div class="divider"></div> <!-- New Divider Bar -->
+            <div class="divider"></div> 
 
             <?php foreach ($subcategories as $subcategory): ?>
                 <?php if (isset($products_by_subcategory[$subcategory['id_subcategory']])): ?>

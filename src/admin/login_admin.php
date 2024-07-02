@@ -1,5 +1,6 @@
 <?php
-require '../include/config.php'; // Inclure le fichier de configuration
+require '../config/config.php'; // Inclure le fichier de configuration
+require '../config/database.php'; // Inclure le fichier de configuration
 
 session_start(); // Démarrer la session au début
 
