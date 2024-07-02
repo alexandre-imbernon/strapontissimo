@@ -33,28 +33,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription Admin</title>
+    <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body>
-    <h2>Inscription Nouvel Administrateur</h2>
-    <form action="register_admin.php" method="post">
-        <label for="username">Nom d'utilisateur:</label><br>
-        <input type="text" id="username" name="username" required><br>
-        
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required><br>
-        
-        <label for="password">Mot de passe:</label><br>
-        <input type="password" id="password" name="password" required><br>
-        
-        <input type="submit" value="S'inscrire">
-    </form>
+    <div class="container">
+        <div class="form-container">
+            <form action="register_admin.php" method="post">
+                <h2>INSCRIPTION ADMIN</h2>
+                <label for="username">Nom d'utilisateur:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="password">Mot de passe:</label>
+                <input type="password" id="password" name="password" required>
+                <input type="submit" value="S'inscrire">
+                <p>Déjà inscrit ? <a href="login_admin.php">Connectez-vous ici</a></p>
+            </form>
+        </div>
+        <div class="image-container image-inscription"></div>
+    </div>
 </body>
 </html>
-

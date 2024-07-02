@@ -63,22 +63,26 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Admin</title>
+    <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body>
-    <h2>Connexion Administrateur</h2>
-    <?php
-    if (!empty($message)) {
-        echo "<p>$message</p>";
-    }
-    ?>
-    <form action="login_admin.php" method="post">
-        <label for="username">Nom d'utilisateur:</label><br>
-        <input type="text" id="username" name="username" required><br>
-        
-        <label for="password">Mot de passe:</label><br>
-        <input type="password" id="password" name="password" required><br>
-        
-        <input type="submit" value="Se connecter">
-    </form>
+    <div class="container">
+        <div class="form-container">
+            <?php
+            if (!empty($message)) {
+                echo "<p>$message</p>";
+            }
+            ?>
+            <form action="login_admin.php" method="post">
+                <h2>CONNEXION ADMIN</h2>
+                <label for="username">Nom d'utilisateur:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Mot de passe:</label>
+                <input type="password" id="password" name="password" required>
+                <input type="submit" value="Se connecter">
+            </form>
+        </div>
+        <div class="image-container image-connexion"></div>
+    </div>
 </body>
 </html>
