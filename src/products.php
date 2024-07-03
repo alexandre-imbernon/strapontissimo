@@ -36,26 +36,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Liste des Produits</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Lora', serif;
             background-color: #f8f8f8;
             color: #333;
             margin: 0;
             padding: 0;
-            font-family: Lora;
         }
-        
+
         h2 {
             margin-top: 15px;
             font-style: italic;
             text-align: center;
-            text-shadow : 3px 3px 4px #d1c7be;
+            text-shadow: 3px 3px 4px #d1c7be;
         }
 
         h3 {
@@ -91,14 +87,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .navbar-logo {
             height: 80px;
         }
-        
+
         .ui-autocomplete {
             max-height: 200px;
             overflow-y: auto;
             overflow-x: hidden;
             z-index: 1000;
             background-color: #f8f8f8 !important; 
-            border: 1px solid ;
+            border: 1px solid;
             border-radius: 4px;
         }
 
@@ -111,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: white !important;
             color: white;
         }
+
         footer {
             margin-top: 10px;
             position: relative;
@@ -141,12 +138,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 1.5em;
             text-align: center;
         }
-    </style>
 
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .input-group .form-control,
+            .input-group .input-group-append {
+                width: 100%;
+            }
+
+            .input-group .input-group-append {
+                margin-top: 10px;
+            }
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
-         $(document).ready(function() {
+        $(document).ready(function() {
             $('#searchInput').autocomplete({
                 source: function(request, response) {
                     $.ajax({
@@ -169,6 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             });
         });
+
         $(document).on('click', '.product', function() {
             var url = $(this).data('href');
             window.location.href = url;
@@ -224,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 var searchTerm = $('#searchInput').val();
                 var category = $('#categorySelect').val();
                 var subCategory = $('#subCategorySelect').val();
-                
+
                 $.ajax({
                     url: 'product.php',
                     method: 'POST',
