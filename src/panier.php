@@ -1,10 +1,11 @@
 <?php
 session_start();
 
-
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
-    // Rediriger vers la page de connexion ou afficher un message d'erreur
+    // Enregistrer un message d'erreur dans la session
+    $_SESSION['flash_message'] = "Pour ajouter des produits au panier, veuillez vous connecter.";
+    // Rediriger vers la page de connexion
     header("Location: login.php");
     exit();
 }
@@ -71,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
     removeFromCart($removeProductId);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

@@ -107,8 +107,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    
-                    
                     <li class="nav-item">
                         <a class="nav-link" href="#">Connexion</a>
                     </li>
@@ -137,6 +135,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-container">
                     <form action="login.php" method="post" class="needs-validation" novalidate>
                         <h2 class="text-center mb-4">Connexion</h2>
+                        <?php
+                        // Afficher le message flash s'il existe
+                        if (isset($_SESSION['flash_message'])) {
+                            echo '<div class="alert alert-warning">' . $_SESSION['flash_message'] . '</div>';
+                            // Supprimer le message flash après l'avoir affiché
+                            unset($_SESSION['flash_message']);
+                        }
+                        ?>
                         <?php if (!empty($error_message)): ?>
                             <div class="alert alert-danger"><?php echo $error_message; ?></div>
                         <?php endif; ?>
@@ -157,9 +163,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <button type="submit" class="btn btn-block">Se connecter</button>
                     </form>
                 </div>
+                <div class="register-link">
+                        <p>Pas de compte ? <a href="register.php">Cliquez ici pour vous inscrire</a></p>
+                    </div>
+                    
             </div>
         </div>
     </div>
+    
 </main>
 
 <footer>
@@ -193,4 +204,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 </html>
-
