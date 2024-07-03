@@ -1,15 +1,31 @@
 <?php
 session_start();
 
-// Initialiser le panier s'il n'existe pas déjà dans la session
-if (!isset($_SESSION['panier'])) {
-    $_SESSION['panier'] = array();
+
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    // Rediriger vers la page de connexion ou afficher un message d'erreur
+    header("Location: login.php");
+    exit();
 }
 
-// Fonction pour ajouter un produit au panier
+// Initialiser le panier de l'utilisateur s'il n'existe pas déjà dans la session
+if (!isset($_SESSION['paniers'])) {
+    $_SESSION['paniers'] = array();
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Initialiser le panier de l'utilisateur s'il n'existe pas déjà
+if (!isset($_SESSION['paniers'][$user_id])) {
+    $_SESSION['paniers'][$user_id] = array();
+}
+
+// Fonction pour ajouter un produit au panier de l'utilisateur
 function addToCart($productId, $productName, $productImage, $productPrice, $quantity = 1) {
-    // Vérifier si le produit est déjà dans le panier
-    foreach ($_SESSION['panier'] as &$item) {
+    global $user_id;
+    // Vérifier si le produit est déjà dans le panier de l'utilisateur
+    foreach ($_SESSION['paniers'][$user_id] as &$item) {
         if ($item['id'] == $productId) {
             // Le produit existe déjà, incrémenter la quantité
             $item['quantity'] += $quantity;
@@ -17,7 +33,7 @@ function addToCart($productId, $productName, $productImage, $productPrice, $quan
         }
     }
 
-    // Le produit n'est pas encore dans le panier, l'ajouter
+    // Le produit n'est pas encore dans le panier de l'utilisateur, l'ajouter
     $product = array(
         'id' => $productId,
         'name' => $productName,
@@ -25,7 +41,7 @@ function addToCart($productId, $productName, $productImage, $productPrice, $quan
         'price' => $productPrice,
         'quantity' => $quantity
     );
-    $_SESSION['panier'][] = $product;
+    $_SESSION['paniers'][$user_id][] = $product;
 }
 
 // Traitement du formulaire d'ajout au panier
@@ -40,9 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
 
 // Fonction pour supprimer un produit du panier
 function removeFromCart($productId) {
-    foreach ($_SESSION['panier'] as $key => $item) {
+    global $user_id;
+    foreach ($_SESSION['paniers'][$user_id] as $key => $item) {
         if ($item['id'] == $productId) {
-            unset($_SESSION['panier'][$key]);
+            unset($_SESSION['paniers'][$user_id][$key]);
             return; // Sortir de la fonction après suppression
         }
     }
@@ -61,34 +78,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panier</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strapontissimo</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Lora', serif;
             background-color: #f8f8f8;
             color: #333;
             margin: 0;
             padding: 0;
         }
 
-        header {
-            background-color: white;
-            text-align: center;
-            padding: 1rem 0;
+        .navbar-logo {
+            height: 80px;
         }
 
-        .cart {
-            max-width: 800px;
+        .main-container {
+            max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            
         }
 
-        .cart h1 {
+        .cart h1, .payment h1 {
             text-align: center;
             color: #444;
+            margin-bottom: 20px;
         }
 
         .cart-item {
@@ -121,12 +145,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
         }
 
         .cart-summary {
-            margin-top: 20px;
-            padding: 10px;
+            padding: 27px;
             background-color: #f2f2f2;
             border: 1px solid #ccc;
             border-radius: 5px;
-            text-align: center;
         }
 
         .cart-summary p {
@@ -136,6 +158,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
         .cart-actions {
             text-align: center;
             margin-top: 10px;
+        }
+
+        .cart{
+            padding:20px;
         }
 
         .proceed-to-checkout-button {
@@ -152,72 +178,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
             background-color: #0056b3;
         }
 
+        .payment {
+            margin-top: 30px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
         footer {
-            margin-top: 20px;
             text-align: center;
-            padding: 10px 0;
+            padding: 10px;
+            background-color: #d1c7be;
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 <header>
-    <img src="assets/images/logo.png" alt="Logo"> <!-- Assurez-vous d'ajouter le chemin correct vers votre image ici -->
-</header>
-<section class="cart">
-    <h1>Votre Panier</h1>
-    <?php if (empty($_SESSION['panier'])): ?>
-        <p>Votre panier est vide.</p>
-    <?php else: ?>
-        <?php foreach ($_SESSION['panier'] as $item): ?>
-            <div class="cart-item">
-                <img src="<?php echo htmlspecialchars($item['image'] ?? ''); ?>" alt="<?php echo htmlspecialchars($item['name'] ?? ''); ?>">
-                <div class="item-details">
-                    <p><?php echo htmlspecialchars($item['name'] ?? ''); ?></p>
-                    <?php if (isset($item['price']) && is_numeric($item['price'])): ?>
-                        <p><?php echo number_format((float)$item['price'], 2, ',', '.') . ' EUR'; ?></p>
-                    <?php else: ?>
-                        <p>Prix non disponible</p>
-                    <?php endif; ?>
-                    <?php
-                    // Afficher la quantité avec "x1", "x2", etc.
-                    $quantityDisplay = ($item['quantity'] > 1) ? 'x' . $item['quantity'] : 'x1';
-                    ?>
-                    <p>Quantité : <?php echo htmlspecialchars($quantityDisplay); ?></p>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="./assets/images/logoo.png" alt="Logo" href="index.php" class="navbar-logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-shopping-cart"></i> Panier
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="cart.html">Voir le panier</a>
                 </div>
-                <form method="post">
-                    <input type="hidden" name="remove_product_id" value="<?php echo htmlspecialchars($item['id']); ?>">
-                    <button type="submit" class="remove-button">Supprimer</button>
-                </form>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="register.php">S'inscrire</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="login.php">Se connecter</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+    </nav>
+</header>
+
+<main class="main-container">
+    <div class="cart">
+        <h1>Mon Panier</h1>
+        <?php if (isset($_SESSION['paniers'][$user_id]) && !empty($_SESSION['paniers'][$user_id])): ?>
+            <div class="cart-items">
+                <?php foreach ($_SESSION['paniers'][$user_id] as $item): ?>
+                    <div class="cart-item">
+                        <img src="<?= htmlspecialchars($item['image']) ?>" alt="Image du produit">
+                        <div class="item-details">
+                            <p><strong>Nom:</strong> <?= htmlspecialchars($item['name']) ?></p>
+                            <p><strong>Prix:</strong> <?= htmlspecialchars($item['price']) ?>€</p>
+                            <p><strong>Quantité:</strong> <?= htmlspecialchars($item['quantity']) ?></p>
+                        </div>
+                        <form action="panier.php" method="post">
+                            <input type="hidden" name="remove_product_id" value="<?= htmlspecialchars($item['id']) ?>">
+                            <button type="submit" class="remove-button">Supprimer</button>
+                        </form>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</section>
-
-<?php
-$totalItems = 0;
-$totalPrice = 0.0;
-
-// Calculer le nombre total d'articles et le total en euros
-foreach ($_SESSION['panier'] as $item) {
-    $totalItems += $item['quantity'];
-    $totalPrice += $item['price'] * $item['quantity'];
-}
-?>
-
-<?php if (!empty($_SESSION['panier'])): ?>
-    <div class="cart-summary">
-        <p>Total des articles : <?php echo $totalItems; ?></p>
-        <p>Total en euros : <?php echo number_format($totalPrice, 2, ',', '.') . ' EUR'; ?></p>
+            <div class="cart-summary">
+                <?php
+                $total = 0;
+                foreach ($_SESSION['paniers'][$user_id] as $item) {
+                    $total += $item['price'] * $item['quantity'];
+                }
+                ?>
+                <p><strong>Total:</strong> <?= $total ?>€</p>
+            </div>
+            <div class="cart-actions">
+                <button class="proceed-to-checkout-button">Procéder au paiement</button>
+            </div>
+        <?php else: ?>
+            <p>Votre panier est vide.</p>
+        <?php endif; ?>
     </div>
-
-    <div class="cart-actions">
-        <button class="proceed-to-checkout-button">Procéder au paiement</button>
-    </div>
-<?php endif; ?>
-
-
+</main>
 <footer>
-    <p>© 2024 Strapontissimo - Le confort instantané</p>
+    <p>&copy; 2023 Strapontissimo. Tous droits réservés.</p>
 </footer>
 </body>
 </html>
