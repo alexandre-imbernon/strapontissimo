@@ -4,33 +4,21 @@ require_once 'database.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = new DataBase();
     $searchTerm = isset($_POST['term']) ? $_POST['term'] : '';
-    $category = isset($_POST['category']) ? $_POST['category'] : '';
-    $subCategory = isset($_POST['subCategory']) ? $_POST['subCategory'] : '';
 
     try {
         $conn = $db->getConnection();
-        $sql = "SELECT * FROM products WHERE 1";
-        $params = array();
-
-        if (!empty($searchTerm)) {
-            $sql .= " AND nom LIKE :term";
-            $params[':term'] = '%' . $searchTerm . '%';
-        }
-
-        if (!empty($category)) {
-            $sql .= " AND categorie = :category";
-            $params[':category'] = $category;
-        }
-
-        if (!empty($subCategory)) {
-            $sql .= " AND sous_categorie = :subCategory";
-            $params[':subCategory'] = $subCategory;
-        }
-
+        $sql = "SELECT nom FROM products WHERE nom LIKE :term";
+        $params = array(':term' => '%' . $searchTerm . '%');
+        
         $stmt = $conn->prepare($sql);
         $stmt->execute($params);
         $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($products);
+        
+        $productNames = array_map(function($product) {
+            return $product['nom'];
+        }, $products);
+        
+        echo json_encode($productNames);
         exit;
     } catch (PDOException $e) {
         echo json_encode(['error' => "Erreur de requête : " . $e->getMessage()]);
@@ -158,6 +146,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
+         $(document).ready(function() {
+            $('#searchInput').autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: 'autocomplete.php',
+                        method: 'POST',
+                        data: { term: request.term },
+                        dataType: 'json',
+                        success: function(data) {
+                            response(data);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erreur lors de la requête AJAX:', status, error);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    $('#searchInput').val(ui.item.value);
+                    $('#searchButton').click();
+                }
+            });
+        });
         $(document).on('click', '.product', function() {
             var url = $(this).data('href');
             window.location.href = url;
