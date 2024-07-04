@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 03 juil. 2024 à 09:19
+-- Généré le : jeu. 04 juil. 2024 à 09:26
 -- Version du serveur : 8.3.0
 -- Version de PHP : 8.2.18
 
@@ -79,6 +79,24 @@ CREATE TABLE IF NOT EXISTS `commande` (
   KEY `id_user` (`id_user`),
   KEY `id_product` (`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id_comment` int NOT NULL AUTO_INCREMENT,
+  `id_product` int NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `comment` text NOT NULL,
+  `rating` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_comment`),
+  KEY `id_product` (`id_product`)
+) ;
 
 -- --------------------------------------------------------
 
