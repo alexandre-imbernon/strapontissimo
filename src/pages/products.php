@@ -1,5 +1,5 @@
 <?php
-require_once 'database.php';
+require_once '../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = new DataBase();
@@ -51,124 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        body {
-            font-family: 'Lora', serif;
-            background-color: #f8f8f8;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        h2 {
-            margin-top: 15px;
-            font-style: italic;
-            text-align: center;
-            text-shadow: 3px 3px 4px #d1c7be;
-        }
-
-        h3 {
-            font-size: 20px;
-        }
-
-        .product-container {
-            padding: 20px;
-            margin-bottom: 40px;
-        }
-
-        .product {
-            background-color: white;
-            border-radius: 5px;
-            margin: 15px 0;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-
-        .product:hover {
-            transform: scale(1.05);
-        }
-
-        .product img {
-            max-width: 100%;
-            height: auto;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 15px;
-        }
-
-        .navbar-logo {
-            height: 80px;
-        }
-
-        .ui-autocomplete {
-            max-height: 200px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            z-index: 1000;
-            background-color: #f8f8f8 !important; 
-            border: 1px solid;
-            border-radius: 4px;
-        }
-
-        .ui-autocomplete .ui-menu-item {
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        .ui-autocomplete .ui-menu-item:hover {
-            background-color: white !important;
-            color: white;
-        }
-
-        footer {
-            margin-top: 10px;
-            position: relative;
-        }
-
-        .product {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .product:hover .overlay {
-            opacity: 1;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-            color: #fff;
-            font-size: 1.5em;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .input-group {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .input-group .form-control,
-            .input-group .input-group-append {
-                width: 100%;
-            }
-
-            .input-group .input-group-append {
-                margin-top: 10px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/products.css">
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
@@ -281,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="assets/images/logoo.png" alt="Logo" class="navbar-logo">
+                <img src="../assets/images/logoo.png" alt="Logo" class="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -289,24 +174,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="panier.php" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                            <a class="dropdown-item" href="include/login.php">Connexion</a>
-                            <a class="dropdown-item" href="include/register.php">Inscription</a>
+                            <a class="dropdown-item" href="login.php">Connexion</a>
+                            <a class="dropdown-item" href="register.php">Inscription</a>
                             <a class="dropdown-item" href="#">Administration</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Déconnexion</a>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="panier.php">
+                        <a class="nav-link" href="#">
                             <i class="fas fa-shopping-cart"></i>  
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Accueil</a>
+                        <a class="nav-link" href="../index.php">Accueil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="products.php"><strong>Nos produits</strong></a>
@@ -362,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     foreach ($products as $product) {
                         echo '<div class="col-12 col-sm-6 col-md-4 col-lg-3">';
                         echo '<div class="product" data-href="details.php?id_product=' . $product['id_product'] . '">';
-                        echo '<img src="' . htmlspecialchars($product['image']) . '" alt="' . htmlspecialchars($product['nom']) . '" class="img-fluid">';
+                        echo '<img src="' . htmlspecialchars($product['image']) . '" alt="' . htmlspecialchars($product['nom']) . '">';
                         echo '<h3>' . htmlspecialchars($product['nom']) . '</h3>';
                         echo '<div class="overlay">Voir détails</div>';
                         echo '</div>';

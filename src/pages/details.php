@@ -1,4 +1,6 @@
 <?php
+session_start(); // Assurez-vous que la session est démarrée
+
 // Inclure la classe DataBase.php
 require_once 'database.php';
 
@@ -36,6 +38,7 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,82 +50,8 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            font-family: Lora;
-        }
-
-        .product-details {
-            max-width: 600px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin: 20px auto; /* Centrer l'élément horizontalement */
-            margin-bottom: 70px;
-        }
-
-
-        .product-details img {
-            max-width: 100%;
-            height: auto;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 15px;
-        }
-
-        .product-details h1 {
-            text-align: center;
-            color: #444;
-        }
-
-        .product-details p {
-            font-size: 1em;
-            margin: 5px 0;
-        }
-
-        .product-details form {
-            text-align: center;
-            
-        }
-
-        .product-details button {
-            background-color:  #8B4513;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .product-details button:hover {
-            background-color: #218838;
-        }
-
-        .navbar-logo {
-        height: 80px; /* Ajustez cette valeur selon la taille de votre logo */
-        }
-
-        .product-details h3 {
-            text-align: center;
-            color: black ;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #f8f8f8;
-            border-top: 1px solid #ddd;
-            margin-top: 20px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/details.css">
 </head>
 <body>
     
@@ -130,7 +59,7 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
     <nav class="navbar navbar-expand-lg navbar-light ">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="assets/images/logoo.png" alt="Logo" class="navbar-logo">
+                <img src="../assets/images/logoo.png" alt="Logo" class="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -155,10 +84,10 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Accueil</a>
+                        <a class="nav-link" href="../index.php">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Nos produits</a>
+                        <a class="nav-link" href="products.php">Nos produits</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">S'enregistrer</a>

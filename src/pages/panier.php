@@ -71,117 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-
-    <style>
-        body {
-            font-family: 'Lora', serif;
-            background-color: #f8f8f8;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar-logo {
-            height: 80px;
-        }
-
-        .main-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            
-        }
-
-        .cart h1, .payment h1 {
-            text-align: center;
-            color: #444;
-            margin-bottom: 20px;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-        }
-
-        .cart-item img {
-            max-width: 100px;
-            margin-right: 20px;
-        }
-
-        .cart-item .item-details {
-            flex-grow: 1;
-        }
-
-        .cart-item p {
-            margin: 0;
-        }
-
-        .cart-item .remove-button {
-            background-color: #ff6347;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        .cart-summary {
-            padding: 27px;
-            background-color: #f2f2f2;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .cart-summary p {
-            margin: 5px 0;
-        }
-
-        .cart-actions {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .cart{
-            padding:20px;
-        }
-
-        .proceed-to-checkout-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .proceed-to-checkout-button:hover {
-            background-color: #0056b3;
-        }
-
-        .payment {
-            margin-top: 30px;
-        }
-
-        .form-group label {
-            font-weight: bold;
-        }
-
-        .form-control {
-            border-radius: 5px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #d1c7be;
-            border-top: 1px solid #ddd;
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/panier.css">
+    
 </head>
 <body>
 <header>
@@ -189,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="./assets/images/logoo.png" alt="Logo" href="index.php" class="navbar-logo">
+                <img src="../assets/images/logoo.png" alt="Logo" href="index.php" class="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -205,8 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
                             <a class="dropdown-item" href="register.php">Inscription</a>
                             <a class="dropdown-item" href="#">Administration</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Déconnexion</a>
-                        </div>
+                            
+                    </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
@@ -214,10 +106,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Accueil</a>
+                        <a class="nav-link" href="../index.php">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Nos produits</a>
+                        <a class="nav-link" href="products.php">Nos produits</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">S'enregistrer</a>

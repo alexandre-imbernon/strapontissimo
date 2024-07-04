@@ -29,215 +29,10 @@ try {
     <title>Strapontissimo</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="./assets/css/style.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1050;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            outline: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-        }
-
-        .modal-modern .modal-content {
-            border-radius: 10px;
-            overflow: hidden;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .modal-modern .modal-header {
-            background-color: #f1f1f1;
-            color: white;
-            border-bottom: none;
-            padding: 10px;
-        }
-
-        .modal-modern .modal-title {
-            font-weight: bold;
-            font-size: 1.5em;
-            color: #8B4513;
-            position:center;
-        }
-
-        .modal-modern .modal-body {
-            padding: 20px;
-            font-size: 1.1em;
-            color: #333;
-        }
-
-        .modal-modern .modal-footer {
-            background-color: #f1f1f1;
-            border-top: none;
-            padding: 10px;
-        }
-
-        .modal-modern .btn-brown:hover {
-            background-color: red;
-        }
-
-        .btn-brown {
-            background-color: #8B4513;
-            color: white;
-        }
-
-
-        .navbar-logo {
-            height: 80px;
-        }
-
-        h1 {
-            margin: 0;
-        }
-
-        .welcome-message {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .product-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .product {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin: 15px;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.2s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .product:hover {
-            transform: scale(1.05);
-        }
-
-        .product img {
-            max-width: 100%;
-            height: auto;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 15px;
-        }
-
-        .product h3 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-
-
-        .product a {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(0, 0, 0, 0.1);
-            color: #fff;
-            text-decoration: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .product:hover {
-            transform: scale(1.05);
-        }
-
-        .product-link {
-            position: relative;
-        }
-
-        footer {
-            margin-top: 10px;
-            position: relative;
-        }
-
-        .main-content {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 500px;
-            background-image: url("./assets/images/fd.png");
-            background-size: cover;
-            color : white;
-            text-shadow: 3px 3px 4px black;
-        }
-
-        .product:hover a {
-            opacity: 1;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 2em;
-            text-shadow: 3px 3px 6px #715439;
-            color: #715439;
-        }
-
-        .section-content {
-            padding: 40px 0;
-        }
-        
-        h2{
-            font-size:60px;
-        }
-
-        @media (max-width: 576px) {
-            .product {
-                flex: 0 0 100%;
-            }
-        }
-
-        @media (min-width: 577px) and (max-width: 768px) {
-            .product {
-                flex: 0 0 48%;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 992px) {
-            .product {
-                flex: 0 0 30%;
-            }
-        }
-
-        @media (min-width: 993px) {
-            .product {
-                flex: 0 0 22%;
-            }
-        }
-        
-    </style>
+    <link rel="stylesheet" href="assets/css/index.css">
 </head>
 <body>
     <header>
@@ -252,19 +47,20 @@ try {
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="pages/panier.php" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-user"></i>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                                <a class="dropdown-item" href="login.php">Connexion</a>
-                                <a class="dropdown-item" href="register.php">Inscription</a>
+                                <a class="dropdown-item" href="pages/login.php">Connexion</a>
+                                <a class="dropdown-item" href="pages/register.php">Inscription</a>
                                 <a class="dropdown-item" href="#">Administration</a>
                                 <div class="dropdown-divider"></div>
                                 <?php if (isset($_SESSION['user_first_name'])): ?>
                                     <div class="welcome-message">
-                                        <a href="../src/include/logout.php">Déconnexion</a>
+                                        <a href="pages/logout.php">Déconnexion</a>
                                     </div>
                                 <?php endif; ?>
+
                             </div>
                         </li>
                         <li class="nav-item">
@@ -273,10 +69,10 @@ try {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Accueil</a>
+                            <a class="nav-link" href="index.php"><strong>Accueil</strong></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="products.php">Nos produits</a>
+                            <a class="nav-link" href="pages/products.php">Nos produits</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">S'enregistrer</a>

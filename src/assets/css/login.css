@@ -1,0 +1,53 @@
+body {
+    font-family: 'Lora';
+    background-color: #f0f0f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-logo {
+    height: 80px;
+}
+
+main {
+    background-color: transparent; /* Fond transparent pour le contenu */
+    padding: 0; /* Aucun padding */
+}
+
+h2 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 3px 3px 8px #d1c7be;
+}
+
+.form-container {
+    padding: 70px; /* Ajout de padding pour espacer le formulaire */
+}
+
+.btn {
+    background-color: #8B4513;
+    color: white;
+}
+
+footer {
+    position: relative;
+}
+
+.img-fluid .form-container{
+    height: 100vh; /* Hauteur de l'image égale à 100% de la hauteur de la vue */
+    width: 100%; /* Largeur de l'image à 100% */
+    object-fit: cover; /* Couverture totale pour l'image */
+
+}
+
+@media (min-width: 768px) {
+    .form-container {
+        padding: 40px;
+    }
+}
+
+.register-link{
+    margin-left: 41px;
+}

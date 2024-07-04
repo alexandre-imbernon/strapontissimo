@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/database.php'; // Assurez-vous que ce chemin est correct
+require_once'../config/database.php';
 
 $db = new DataBase();
 $conn = $db->getConnection();
@@ -42,73 +42,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="../assets/css/style.css">
-
-    <style>
-        body {
-            font-family: 'Lora';
-            background-color: #f0f0f0;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar-logo {
-            height: 80px;
-        }
-
-        main {
-            background-color: transparent; /* Fond transparent pour le contenu */
-            padding: 0; /* Aucun padding */
-        }
-
-        h2 {
-            font-size: 28px;
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 3px 3px 8px #d1c7be;
-        }
-
-        .form-container {
-            padding: 70px; /* Ajout de padding pour espacer le formulaire */
-        }
-
-        .btn {
-            background-color: #8B4513;
-            color: white;
-        }
-
-        footer {
-            position: relative;
-        }
-
-        .img-fluid .form-container{
-            height: 100vh; /* Hauteur de l'image égale à 100% de la hauteur de la vue */
-            width: 100%; /* Largeur de l'image à 100% */
-            object-fit: cover; /* Couverture totale pour l'image */
-        
-        }
-
-        @media (min-width: 768px) {
-            .form-container {
-                padding: 40px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/login.css">
 </head>
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="../assets/images/logoo.png" alt="Logo" class="navbar-logo">
+            <img src="../assets/images/logoo.png" alt="Logo" class="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    
-                    
                     <li class="nav-item">
                         <a class="nav-link" href="#">Connexion</a>
                     </li>
@@ -162,6 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </main>
 
+
 <footer>
     <div class="container">
         <p>&copy; 2024 VotreSite. Tous droits réservés.</p>
@@ -193,4 +141,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 </html>
-
