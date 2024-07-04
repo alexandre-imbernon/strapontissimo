@@ -1,11 +1,11 @@
 <?php
 session_start();
+require_once __DIR__ . '/config/config.php';
+
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
-    // Enregistrer un message d'erreur dans la session
     $_SESSION['flash_message'] = "Pour ajouter des produits au panier, veuillez vous connecter.";
-    // Rediriger vers la page de connexion
     header("Location: login.php");
     exit();
 }
@@ -25,16 +25,13 @@ if (!isset($_SESSION['paniers'][$user_id])) {
 // Fonction pour ajouter un produit au panier de l'utilisateur
 function addToCart($productId, $productName, $productImage, $productPrice, $quantity = 1) {
     global $user_id;
-    // Vérifier si le produit est déjà dans le panier de l'utilisateur
     foreach ($_SESSION['paniers'][$user_id] as &$item) {
         if ($item['id'] == $productId) {
-            // Le produit existe déjà, incrémenter la quantité
             $item['quantity'] += $quantity;
-            return; // Sortir de la fonction après mise à jour
+            return;
         }
     }
 
-    // Le produit n'est pas encore dans le panier de l'utilisateur, l'ajouter
     $product = array(
         'id' => $productId,
         'name' => $productName,
@@ -61,7 +58,7 @@ function removeFromCart($productId) {
     foreach ($_SESSION['paniers'][$user_id] as $key => $item) {
         if ($item['id'] == $productId) {
             unset($_SESSION['paniers'][$user_id][$key]);
-            return; // Sortir de la fonction après suppression
+            return;
         }
     }
 }
@@ -71,8 +68,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
     $removeProductId = $_POST['remove_product_id'];
     removeFromCart($removeProductId);
 }
-?>
 
+// Créer la session de paiement Stripe
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
+    $total = 0;
+    $line_items = [];
+    foreach ($_SESSION['paniers'][$user_id] as $item) {
+        $total += $item['price'] * $item['quantity'];
+        $line_items[] = [
+            'price_data' => [
+                'currency' => 'eur',
+                'product_data' => [
+                    'name' => $item['name'],
+                ],
+                'unit_amount' => $item['price'] * 100,
+            ],
+            'quantity' => $item['quantity'],
+        ];
+    }
+
+    $checkout_session = \Stripe\Checkout\Session::create([
+        'payment_method_types' => ['card'],
+        'line_items' => $line_items,
+        'mode' => 'payment',
+        'success_url' => 'https://example.com/success.php',
+        'cancel_url' => 'https://example.com/cancel.php',
+    ]);
+
+    header("Location: " . $checkout_session->url);
+    exit();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -80,9 +106,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panier</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strapontissimo</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -90,7 +113,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="assets/css/style.css">
-
     <style>
         body {
             font-family: 'Lora', serif;
@@ -99,24 +121,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
             margin: 0;
             padding: 0;
         }
-
         .navbar-logo {
             height: 80px;
         }
-
         .main-container {
             max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-            
         }
-
         .cart h1, .payment h1 {
             text-align: center;
             color: #444;
             margin-bottom: 20px;
         }
-
         .cart-item {
             display: flex;
             align-items: center;
@@ -124,20 +141,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
         }
-
         .cart-item img {
             max-width: 100px;
             margin-right: 20px;
         }
-
         .cart-item .item-details {
             flex-grow: 1;
         }
-
         .cart-item p {
             margin: 0;
         }
-
         .cart-item .remove-button {
             background-color: #ff6347;
             color: white;
@@ -145,27 +158,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
             padding: 5px 10px;
             cursor: pointer;
         }
-
         .cart-summary {
             padding: 27px;
             background-color: #f2f2f2;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-
         .cart-summary p {
             margin: 5px 0;
         }
-
         .cart-actions {
             text-align: center;
             margin-top: 10px;
         }
-
-        .cart{
-            padding:20px;
+        .cart {
+            padding: 20px;
         }
-
         .proceed-to-checkout-button {
             background-color: #007bff;
             color: white;
@@ -175,23 +183,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
             cursor: pointer;
             border-radius: 5px;
         }
-
         .proceed-to-checkout-button:hover {
             background-color: #0056b3;
         }
-
         .payment {
             margin-top: 30px;
         }
-
         .form-group label {
             font-weight: bold;
         }
-
         .form-control {
             border-radius: 5px;
         }
-
         footer {
             text-align: center;
             padding: 10px;
@@ -203,7 +206,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
 </head>
 <body>
 <header>
-
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="#">
@@ -214,27 +216,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-shopping-cart"></i> Panier
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="cart.html">Voir le panier</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="register.php">S'inscrire</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="login.php">Se connecter</a>
-            </li>
-        </ul>
-    </div>
-</div>
-
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-shopping-cart"></i> Panier
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="cart.html">Voir le panier</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">S'inscrire</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">Se connecter</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
 </header>
-
 <main class="main-container">
     <div class="cart">
         <h1>Mon Panier</h1>
@@ -265,7 +265,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_product_id']))
                 <p><strong>Total:</strong> <?= $total ?>€</p>
             </div>
             <div class="cart-actions">
-                <button class="proceed-to-checkout-button">Procéder au paiement</button>
+                <form action="panier.php" method="post">
+                    <button type="submit" name="checkout" class="proceed-to-checkout-button">Procéder au paiement</button>
+                </form>
             </div>
         <?php else: ?>
             <p>Votre panier est vide.</p>

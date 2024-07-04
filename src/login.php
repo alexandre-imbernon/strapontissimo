@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="#">
-            <img src="<?= __DIR__ ?>/assets/images/logoo.png" alt="Logo" class="navbar-logo">
+            <img src="./assets/images/logoo.png" alt="Logo" class="navbar-logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-6 p-0">
-                <img src="<?= __DIR__ ?>/assets/images/header.jpg" class="img-fluid" alt="Left Image">
+                <img src="./assets/images/header.jpg" class="img-fluid" alt="Left Image">
             </div>
             <div class="col-lg-6">
                 <div class="form-container">
