@@ -16,4 +16,6 @@ if ($conn->connect_error) {
 if (!$conn->set_charset("utf8")) {
     die("Erreur lors de la définition du jeu de caractères: " . $conn->error);
 }
+
+define('ACCESS_PASSWORD', 'asmalafraude'); // Définir le mot de passe d'accès
 ?>
