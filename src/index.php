@@ -64,7 +64,7 @@ try {
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo isset($_SESSION['user_first_name']) ? 'panier.php' : 'include/login.php'; ?>">
+                            <a class="nav-link" href="<?php echo isset($_SESSION['user_first_name']) ? 'pages/panier.php' : 'pages/login.php'; ?>">
                                 <i class="fas fa-shopping-cart"></i>  
                             </a>
                         </li>
@@ -98,10 +98,10 @@ try {
                 <hr>
                 <div class="product-container">
                     <?php foreach ($featuredProducts as $product): ?>
-                        <div class="product" data-href="details.php?id_product=<?php echo $product['id_product']; ?>">
+                        <div class="product" data-href="pages/details.php?id_product=<?php echo $product['id_product']; ?>">
                             <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
                             <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
-                            <a href="details.php?id_product=<?php echo $product['id_product']; ?>">Voir détails</a>
+                            <a href="pages/details.php?id_product=<?php echo $product['id_product']; ?>">Voir détails</a>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -114,10 +114,10 @@ try {
                 <hr>
                 <div class="product-container">
                     <?php foreach ($allProducts as $product): ?>
-                        <div class="product" data-href="details.php?id_product=<?php echo $product['id_product']; ?>">
+                        <div class="product" data-href="pages/details.php?id_product=<?php echo $product['id_product']; ?>">
                             <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
                             <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
-                            <a href="details.php?id_product=<?php echo $product['id_product']; ?>">Voir détails</a>
+                            <a href="pages/details.php?id_product=<?php echo $product['id_product']; ?>">Voir détails</a>
                         </div>
                     <?php endforeach; ?>
                 </div>

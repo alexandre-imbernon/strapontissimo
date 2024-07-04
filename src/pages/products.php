@@ -56,110 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#searchInput').autocomplete({
-                source: function(request, response) {
-                    $.ajax({
-                        url: 'products.php',
-                        method: 'POST',
-                        data: { term: request.term },
-                        dataType: 'json',
-                        success: function(data) {
-                            response(data);
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Erreur lors de la requête AJAX:', status, error);
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function(event, ui) {
-                    $('#searchInput').val(ui.item.value);
-                    $('#searchButton').click();
-                }
-            });
-        });
-
-        $(document).on('click', '.product', function() {
-            var url = $(this).data('href');
-            window.location.href = url;
-        });
-
-        $(document).ready(function() {
-            var productContainer = $('#productContainer');
-
-            function displayProducts(products) {
-                productContainer.empty();
-                products.forEach(function(product) {
-                    var productHTML = `
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="product" data-href="details.php?id_product=${product.id_product}">
-                                <img src="${product.image}" alt="${product.nom}">
-                                <h3>${product.nom}</h3>
-                                <div class="overlay">Voir détails</div>
-                            </div>
-                        </div>
-                    `;
-                    productContainer.append(productHTML);
-                });
-            }
-
-            $('#searchInput').autocomplete({
-                source: function(request, response) {
-                    $.ajax({
-                        url: 'products.php',
-                        method: 'POST',
-                        data: { term: request.term },
-                        dataType: 'json',
-                        success: function(data) {
-                            response($.map(data, function(item) {
-                                return {
-                                    label: item.nom,
-                                    value: item.nom
-                                };
-                            }));
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Erreur lors de la requête AJAX:', status, error);
-                        }
-                    });
-                },
-                minLength: 2,
-                select: function(event, ui) {
-                    $('#searchInput').val(ui.item.value);
-                    $('#searchButton').click();
-                }
-            });
-
-            $('#searchButton').on('click', function() {
-                var searchTerm = $('#searchInput').val();
-                var category = $('#categorySelect').val();
-                var subCategory = $('#subCategorySelect').val();
-
-                $.ajax({
-                    url: 'products.php',
-                    method: 'POST',
-                    data: { 
-                        term: searchTerm,
-                        category: category,
-                        subCategory: subCategory
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.error) {
-                            console.error(response.error);
-                        } else {
-                            displayProducts(response);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Erreur lors de la requête AJAX:', status, error);
-                    }
-                });
-            });
-        });
-    </script>
+        
 </head>
 <body>
 <header>
@@ -260,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </section>
+    
 </main>
 
 <footer>
@@ -267,5 +165,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+<script src="../assets/js/bar.js"></script></body>
 </html>
