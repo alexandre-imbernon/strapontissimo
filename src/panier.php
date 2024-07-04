@@ -91,8 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
         'payment_method_types' => ['card'],
         'line_items' => $line_items,
         'mode' => 'payment',
-        'success_url' => 'https://example.com/success.php',
-        'cancel_url' => 'https://example.com/cancel.php',
+        'success_url' => 'http://localhost/adelmerge/src/config/success.php',
+        'cancel_url' => 'http://localhost/adelmerge/src/config/cancel.php',
     ]);
 
     header("Location: " . $checkout_session->url);
