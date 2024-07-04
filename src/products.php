@@ -4,21 +4,34 @@ require_once 'database.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = new DataBase();
     $searchTerm = isset($_POST['term']) ? $_POST['term'] : '';
+    $category = isset($_POST['category']) ? $_POST['category'] : '';
+    $subCategory = isset($_POST['subCategory']) ? $_POST['subCategory'] : '';
 
     try {
         $conn = $db->getConnection();
-        $sql = "SELECT nom FROM products WHERE nom LIKE :term";
+        $sql = "SELECT p.id_product, p.nom, p.image 
+                FROM products p 
+                JOIN subcategory sc ON p.id_subcategory = sc.id_subcategory
+                JOIN category c ON p.id_category = c.id_category
+                WHERE p.nom LIKE :term";
+
         $params = array(':term' => '%' . $searchTerm . '%');
-        
+
+        // Ajouter la logique pour les filtres de catégorie et sous-catégorie si nécessaire
+        if ($category) {
+            $sql .= " AND c.nom = :category"; // Utilisation de c.nom si la colonne nom de category contient le nom de la categorie
+            $params[':category'] = $category;
+        }
+        if ($subCategory) {
+            $sql .= " AND sc.nom = :subCategory"; // Utilisation de sc.nom si la colonne nom de subcategory contient le nom de la sous-categorie
+            $params[':subCategory'] = $subCategory;
+        }
+
         $stmt = $conn->prepare($sql);
         $stmt->execute($params);
         $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        $productNames = array_map(function($product) {
-            return $product['nom'];
-        }, $products);
-        
-        echo json_encode($productNames);
+
+        echo json_encode($products);
         exit;
     } catch (PDOException $e) {
         echo json_encode(['error' => "Erreur de requête : " . $e->getMessage()]);
@@ -26,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -162,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $('#searchInput').autocomplete({
                 source: function(request, response) {
                     $.ajax({
-                        url: 'autocomplete.php',
+                        url: 'products.php',
                         method: 'POST',
                         data: { term: request.term },
                         dataType: 'json',
@@ -209,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $('#searchInput').autocomplete({
                 source: function(request, response) {
                     $.ajax({
-                        url: 'product.php',
+                        url: 'products.php',
                         method: 'POST',
                         data: { term: request.term },
                         dataType: 'json',
@@ -239,7 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 var subCategory = $('#subCategorySelect').val();
 
                 $.ajax({
-                    url: 'product.php',
+                    url: 'products.php',
                     method: 'POST',
                     data: { 
                         term: searchTerm,
@@ -279,23 +293,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <i class="fas fa-user"></i>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                            <a class="dropdown-item" href="login.php">Connexion</a>
-                            <a class="dropdown-item" href="#">Inscription</a>
+                            <a class="dropdown-item" href="include/login.php">Connexion</a>
+                            <a class="dropdown-item" href="include/register.php">Inscription</a>
                             <a class="dropdown-item" href="#">Administration</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Déconnexion</a>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="panier.php">
                             <i class="fas fa-shopping-cart"></i>  
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Accueil</a>
+                        <a class="nav-link" href="index.php">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><strong>Nos produits</strong></a>
+                        <a class="nav-link" href="products.php"><strong>Nos produits</strong></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">S'enregistrer</a>
@@ -348,7 +362,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     foreach ($products as $product) {
                         echo '<div class="col-12 col-sm-6 col-md-4 col-lg-3">';
                         echo '<div class="product" data-href="details.php?id_product=' . $product['id_product'] . '">';
-                        echo '<img src="' . htmlspecialchars($product['image']) . '" alt="' . htmlspecialchars($product['nom']) . '">';
+                        echo '<img src="' . htmlspecialchars($product['image']) . '" alt="' . htmlspecialchars($product['nom']) . '" class="img-fluid">';
                         echo '<h3>' . htmlspecialchars($product['nom']) . '</h3>';
                         echo '<div class="overlay">Voir détails</div>';
                         echo '</div>';
