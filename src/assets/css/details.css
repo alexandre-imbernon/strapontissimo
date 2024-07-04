@@ -9,7 +9,7 @@ body {
 
 .product-details {
     max-width: 600px;
-    padding: 20px;
+    padding: 40px;
     border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -17,6 +17,17 @@ body {
     margin-bottom: 70px;
 }
 
+
+.commentaire{
+    width: 90%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; /* Centrer l'élément horizontalement */
+    margin-bottom: 70px;
+
+}
 
 .product-details img {
     max-width: 100%;
@@ -50,6 +61,19 @@ body {
     font-size: 1em;
 }
 
+.commentaire button {
+    background-color:  #8B4513;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+
+
 .product-details button:hover {
     background-color: #218838;
 }
@@ -78,4 +102,7 @@ footer {
     border-top: 1px solid #ddd;
     margin-top: 20px;
 }
-    
+
+h4{
+    text-shadow: 3px 3px 4px #d1c7be;
+}

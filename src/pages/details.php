@@ -151,27 +151,40 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
 
 <!-- Section détails du produit -->
 <section>
-    <div class="product-details">
-        <!-- Affichage des détails du produit -->
-        <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
-        <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>">
-        <p><strong>Prix : </strong><?php echo number_format($product['price'], 2); ?> €</p>
-        <p><strong>Description :</strong> <?php echo htmlspecialchars($product['infoproduct']); ?></p>
-        <p><strong>En stock: </strong><?php echo $product['stock']; ?></p>
-        <p><strong>Référencé le:</strong> <?php echo $product['date']; ?></p>
-        
-        <!-- Formulaire d'ajout au panier -->
-        <form action="panier.php" method="post">
-            <input type="hidden" name="product_id" value="<?php echo $product['id_product']; ?>">
-            <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product['nom']); ?>">
-            <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($product['image']); ?>">
-            <input type="hidden" name="product_price" value="<?php echo $product['price']; ?>">
-            <button type="submit">Ajouter au panier</button>
-        </form>
+    <div class="container">
+        <div class="row">
+            <!-- Colonne pour l'image -->
+            <div class="col-lg-6">
+                <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['nom']); ?>" class="img-fluid">
+            </div>
+            
+            <!-- Colonne pour les détails du produit -->
+            <div class="col-lg-6">
+                <div class="product-details">
+                    <!-- Affichage des détails du produit -->
+                    <h3><?php echo htmlspecialchars($product['nom']); ?></h3>
+                    <p ><strong>Prix : </strong><?php echo number_format($product['price'], 2); ?> €</p>
+                    <p><strong>Description :</strong> <?php echo htmlspecialchars($product['infoproduct']); ?></p>
+                    <p><strong>En stock: </strong><?php echo $product['stock']; ?></p>
+                    <p><strong>Référencé le:</strong> <?php echo $product['date']; ?></p>
+                    
+                    <!-- Formulaire d'ajout au panier -->
+                    <form action="panier.php" method="post">
+                        <input type="hidden" name="product_id" value="<?php echo $product['id_product']; ?>">
+                        <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product['nom']); ?>">
+                        <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($product['image']); ?>">
+                        <input type="hidden" name="product_price" value="<?php echo $product['price']; ?>">
+                        <button type="submit" class="btn btn-primary">Ajouter au panier</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <!-- Formulaire d'ajout de commentaire -->
-        <hr>
-        <h4>Avis des utilisateurs</h4>
+<section>
+<div class="commentaire">
+<h4>Avis des utilisateurs</h4>
         <form action="details.php?id_product=<?php echo $productId; ?>" method="post">
             <label for="username">Nom d'utilisateur :</label><br>
             <input type="text" id="username" name="username" required><br><br>
@@ -179,16 +192,16 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
             <textarea id="comment" name="comment" rows="4" required></textarea><br><br>
             <label for="rating">Note :</label>
             <div class="star-rating">
-                <input type="radio" id="5-stars" name="rating" value="5" />
-                <label for="5-stars" class="star">&#9733;</label>
-                <input type="radio" id="4-stars" name="rating" value="4" />
-                <label for="4-stars" class="star">&#9733;</label>
-                <input type="radio" id="3-stars" name="rating" value="3" />
-                <label for="3-stars" class="star">&#9733;</label>
+                <input type="radio" id="1-stars" name="rating" value="1" />
+                <label for="1-stars" class="star">&#9733;</label>
                 <input type="radio" id="2-stars" name="rating" value="2" />
                 <label for="2-stars" class="star">&#9733;</label>
-                <input type="radio" id="1-star" name="rating" value="1" />
-                <label for="1-star" class="star">&#9733;</label>
+                <input type="radio" id="3-stars" name="rating" value="3" />
+                <label for="3-stars" class="star">&#9733;</label>
+                <input type="radio" id="4-stars" name="rating" value="4" />
+                <label for="4-stars" class="star">&#9733;</label>
+                <input type="radio" id="5-star" name="rating" value="5" />
+                <label for="5-star" class="star">&#9733;</label>
             </div><br><br>
             <button type="submit" name="submit_comment">Soumettre</button>
         </form>
@@ -203,7 +216,6 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
                 </div>
             <?php endforeach; ?>
         </div>
-    </div>
 </section>
 <footer>
     <p>© 2024 Strapontissimo - Le confort instantané</p>
