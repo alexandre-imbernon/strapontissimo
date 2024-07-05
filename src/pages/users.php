@@ -69,74 +69,117 @@ if ($stmt->rowCount() > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Utilisateur</title>
-    <style>
-        /* Styles de base pour le formulaire */
-        form {
-            max-width: 600px;
-            margin: auto;
-            padding: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        input, button {
-            width: 100%;
-            padding: 0.5rem;
-            margin: 0.5rem 0;
-        }
-        .message {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-    </style>
+    <title>Mon Compte</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/users.css">
 </head>
 <body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light ">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="../assets/images/logoo.png" alt="Logo" href="index.php" class="navbar-logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.php">Accueil</a>
+                    </li>                                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.php">Nos produits</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="users.php">Mon compte</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<main class="my-4">
+    <div class="container">
+        <h1 class="mb-4">Modifier vos informations</h1>
 
-<h1>Modifier vos informations</h1>
+        <?php if (!empty($message)): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($message) ?></div>
+        <?php endif; ?>
 
-<?php if (!empty($message)): ?>
-    <div class="message"><?= htmlspecialchars($message) ?></div>
-<?php endif; ?>
+        <form id="userForm" method="POST">
+            <div class="form-group">
+                <label for="nom">Nom:</label>
+                <input type="text" id="nom" name="nom" class="form-control" value="<?= htmlspecialchars($user_info['nom'] ?? '') ?>" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="prenom">Prénom:</label>
+                <input type="text" id="prenom" name="prenom" class="form-control" value="<?= htmlspecialchars($user_info['prenom'] ?? '') ?>" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="adresse">Adresse:</label>
+                <input type="text" id="adresse" name="adresse" class="form-control" value="<?= htmlspecialchars($user_info['adresse'] ?? '') ?>" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" value="<?= htmlspecialchars($user_info['email'] ?? '') ?>" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mot de passe:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
 
-<form id="userForm" method="POST">
-    <label for="nom">Nom:</label>
-    <input type="text" id="nom" name="nom" value="<?= htmlspecialchars($user_info['nom'] ?? '') ?>" required>
-    
-    <label for="prenom">Prénom:</label>
-    <input type="text" id="prenom" name="prenom" value="<?= htmlspecialchars($user_info['prenom'] ?? '') ?>" required>
-    
-    <label for="adresse">Adresse:</label>
-    <input type="text" id="adresse" name="adresse" value="<?= htmlspecialchars($user_info['adresse'] ?? '') ?>" required>
-    
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<?= htmlspecialchars($user_info['email'] ?? '') ?>" required>
-    
-    <label for="password">Mot de passe:</label>
-    <input type="password" id="password" name="password" value="<?= htmlspecialchars($user_info['password'] ?? '') ?>" required>
-    
-    <label for="city">Ville:</label>
-    <input type="text" id="city" name="city" value="<?= htmlspecialchars($user_info['city'] ?? '') ?>" required>
-    
-    <label for="postcode">Code Postal:</label>
-    <input type="text" id="postcode" name="postcode" value="<?= htmlspecialchars($user_info['postcode'] ?? '') ?>" required>
-    
-    <label for="tel">Téléphone:</label>
-    <input type="tel" id="tel" name="tel" value="<?= htmlspecialchars($user_info['tel'] ?? '') ?>" required>
-    
-    <button type="submit">Mettre à jour</button>
-</form>
 
-<h1>Historique des commandes</h1>
-<div id="orderHistory">
-    <?php if (!empty($order_history)): ?>
-        <?php foreach ($order_history as $order): ?>
-            <div>Commande #<?= $order['id_commande'] ?> - <?= $order['date_commande'] ?> - <?= htmlspecialchars($order['statut']) ?></div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <div>Aucune commande trouvée</div>
-    <?php endif; ?>
-</div>
+            <div class="form-group">
+                <label for="city">Ville:</label>
+                <input type="text" id="city" name="city" class="form-control" value="<?= htmlspecialchars($user_info['city'] ?? '') ?>" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="postcode">Code Postal:</label>
+                <input type="text" id="postcode" name="postcode" class="form-control" value="<?= htmlspecialchars($user_info['postcode'] ?? '') ?>" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="tel">Téléphone:</label>
+                <input type="tel" id="tel" name="tel" class="form-control" value="<?= htmlspecialchars($user_info['tel'] ?? '') ?>" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        </form>
 
+        <div class="order-history my-4">
+            <h2 class="mb-4">Historique des commandes</h2>
+            <?php if (!empty($order_history)): ?>
+                <?php foreach ($order_history as $order): ?>
+                    <div class="order-item" id="order-<?= $order['id_commande'] ?>">
+                        Commande #<?= $order['id_commande'] ?> - <?= $order['date_commande'] ?> - <?= $order['statut'] ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="alert alert-info">Aucune commande trouvée</div>
+            <?php endif; ?>
+        </div>
+
+
+
+
+
+    </div>
+</main>
+<footer class="text-center mt-5">
+    <p>&copy; 2023 Strapontissimo. Tous droits réservés.</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

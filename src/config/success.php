@@ -1,5 +1,29 @@
 <?php
+require_once __DIR__ . '/config.php'; // Chemin relatif pour config.php
+require_once __DIR__ . '/DataBase.php'; // Chemin relatif pour DataBase.php
 session_start();
+
+$user_id = $_SESSION['user_id'];
+
+try {
+    $db = new DataBase();
+    $connection = $db->getConnection();
+} catch (PDOException $e) {
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
+}
+
+// Insertion de la commande dans la base de données
+$date_commande = date('Y-m-d');
+$statut = "En attente"; // Statut initial de la commande
+$id_product = $_SESSION['paniers'][$user_id][0]['id'];
+$qté = $_SESSION['paniers'][$user_id][0]['quantity'];
+
+$sql = "INSERT INTO commande (id_user, date_commande, statut, id_product, qté) VALUES (?, ?, ?, ?, ?)";
+$stmt = $connection->prepare($sql);
+$stmt->execute([$user_id, $date_commande, $statut, $id_product, $qté]);
+
+// Vider le panier après la commande réussie
+$_SESSION['paniers'][$user_id] = [];
 ?>
 
 <!DOCTYPE html>

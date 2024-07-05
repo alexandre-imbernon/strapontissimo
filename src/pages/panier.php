@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
         </div>
     </nav>
 </header>
-<main class="main-container container">
+<main class="main-container container mb-4">
     <div class="row">
         <div class="col-md-8">
             <div class="cart">

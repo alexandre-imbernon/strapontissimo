@@ -14,6 +14,7 @@ body {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
+    margin-bottom:20px;
     
 }
 
@@ -69,8 +70,9 @@ body {
 }
 
 .cart{
-    padding:20px;
+    margin-bottom: 20%;
 }
+
 
 .proceed-to-checkout-button {
     background-color: #007bff;
@@ -103,5 +105,4 @@ footer {
     padding: 10px;
     background-color: #d1c7be;
     border-top: 1px solid #ddd;
-    margin-top: 20px;
 }
