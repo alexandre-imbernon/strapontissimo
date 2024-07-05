@@ -75,7 +75,7 @@ try {
                             <a class="nav-link" href="pages/products.php">Nos produits</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">S'enregistrer</a>
+                            <a class="nav-link" href="pages/users.php">Mon compte</a>
                         </li>
                     </ul>
                 </div>

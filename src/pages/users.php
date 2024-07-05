@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once __DIR__ . '/config/config.php'; // Assurez-vous du chemin correct
+require_once __DIR__ . '/../config/config.php'; // Assurez-vous du chemin correct
 
 // Inclure votre classe de base de données
-require_once __DIR__ . '/config/DataBase.php'; // Assurez-vous du chemin correct
+require_once __DIR__ . '/..//config/DataBase.php'; // Assurez-vous du chemin correct
 
 $user_id = $_SESSION['user_id'];
 

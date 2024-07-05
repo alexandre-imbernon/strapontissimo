@@ -126,19 +126,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-shopping-cart"></i> Panier
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="cart.html">Voir le panier</a>
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.php">Accueil</a>
+                    </li>                                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.php">Nos produits</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="register.php">S'inscrire</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php">Se connecter</a>
+                        <a class="nav-link" href="users.php">Mon compte</a>
                     </li>
                 </ul>
             </div>

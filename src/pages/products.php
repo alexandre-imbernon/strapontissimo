@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a class="nav-link" href="products.php"><strong>Nos produits</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">S'enregistrer</a>
+                        <a class="nav-link" href="users.php">Mon compte</a>
                     </li>
                 </ul>
             </div>

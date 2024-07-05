@@ -140,7 +140,7 @@ if (isset($_GET['id_product']) && is_numeric($_GET['id_product'])) {
                         <a class="nav-link" href="products.php">Nos produits</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">S'enregistrer</a>
+                        <a class="nav-link" href="users.php">Mon Compte</a>
                     </li>
                     
                 </ul>
