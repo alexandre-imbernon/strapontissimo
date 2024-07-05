@@ -53,7 +53,7 @@ try {
                             <div class="dropdown-menu" aria-labelledby="adminDropdown">
                                 <a class="dropdown-item" href="pages/login.php">Connexion</a>
                                 <a class="dropdown-item" href="pages/register.php">Inscription</a>
-                                <a class="dropdown-item" href="#">Administration</a>
+                                <a class="dropdown-item" href="pages/register_admin.php">Administration</a>
                                 <div class="dropdown-divider"></div>
                                 <?php if (isset($_SESSION['user_first_name'])): ?>
                                     <div class="welcome-message">

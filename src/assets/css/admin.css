@@ -1,0 +1,108 @@
+/* admin.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #F1EDE4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+.container {
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    max-width: 900px;
+    width: 100%;
+    overflow: hidden;
+    min-height: 600px; /* Ensure both pages have the same minimum height */
+}
+
+.form-container {
+    padding: 40px;
+    width: 50%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-container h2 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #333;
+}
+
+.form-container label {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.form-container input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #93C6FF;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-container input[type="submit"]:hover {
+    background-color: #355274;
+}
+
+.form-container p {
+    text-align: center;
+    font-size: 14px;
+}
+
+.form-container p a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.form-container p a:hover {
+    text-decoration: underline;
+}
+
+.image-container {
+    width: 50%;
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-connexion {
+    background-image: url('../images/admin_bg.svg');
+}
+
+.image-inscription {
+    background-image: url('../images/admin_bg.svg');
+}
+

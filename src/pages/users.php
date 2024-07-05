@@ -1,10 +1,7 @@
 <?php
-session_start();
 require_once __DIR__ . '/../config/config.php'; // Assurez-vous du chemin correct
-
-// Inclure votre classe de base de données
-require_once __DIR__ . '/..//config/DataBase.php'; // Assurez-vous du chemin correct
-
+require_once __DIR__ . '/../config/DataBase.php'; // Assurez-vous du chemin correct
+session_start();
 $user_id = $_SESSION['user_id'];
 
 // Créer une instance de la classe DataBase pour la connexion
@@ -13,9 +10,9 @@ $connection = $db->getConnection();
 
 // Récupérer les informations de l'utilisateur
 $user_info = [];
-$sql = "SELECT nom, prenom, adresse, email, password, city, postcode, tel, registerdate FROM users WHERE id_user = ?";
+$sql = "SELECT * FROM users WHERE id_user = :user_id";
 $stmt = $connection->prepare($sql);
-$stmt->execute([$user_id]);
+$stmt->execute([':user_id' => $user_id]);
 
 if ($stmt->rowCount() > 0) {
     $user_info = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -136,7 +133,6 @@ if ($stmt->rowCount() > 0) {
                 <input type="password" id="password" name="password" class="form-control" required>
             </div>
 
-
             <div class="form-group">
                 <label for="city">Ville:</label>
                 <input type="text" id="city" name="city" class="form-control" value="<?= htmlspecialchars($user_info['city'] ?? '') ?>" required>
@@ -182,4 +178,5 @@ if ($stmt->rowCount() > 0) {
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
